@@ -1,0 +1,165 @@
+/* Material Design 3 Header Component - Brown Cinema Glassmorphism with Page Titles */
+.app-header {
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  height: 80px; /* Increased from 64px to give more space */
+  display: flex;
+  align-items: center;
+  background: transparent;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Hide header when booking flow is active */
+body.booking-flow-active .app-header {
+  transform: translateY(-100%);
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* The blurred background layer */
+.app-header::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 120px; /* Increased to match header */
+  background: rgba(30, 24, 20, 0.85);
+  backdrop-filter: blur(24px) saturate(150%);
+  -webkit-backdrop-filter: blur(24px) saturate(150%);
+  
+  /* Easing gradient mask */
+  mask-image: linear-gradient(
+    to bottom,
+    black 0%,
+    rgba(0, 0, 0, 0.98) 15%,
+    rgba(0, 0, 0, 0.92) 30%,
+    rgba(0, 0, 0, 0.8) 45%,
+    rgba(0, 0, 0, 0.6) 58%,
+    rgba(0, 0, 0, 0.38) 72%,
+    rgba(0, 0, 0, 0.18) 84%,
+    rgba(0, 0, 0, 0.05) 94%,
+    transparent 100%
+  );
+  -webkit-mask-image: linear-gradient(
+    to bottom,
+    black 0%,
+    rgba(0, 0, 0, 0.98) 15%,
+    rgba(0, 0, 0, 0.92) 30%,
+    rgba(0, 0, 0, 0.8) 45%,
+    rgba(0, 0, 0, 0.6) 58%,
+    rgba(0, 0, 0, 0.38) 72%,
+    rgba(0, 0, 0, 0.18) 84%,
+    rgba(0, 0, 0, 0.05) 94%,
+    transparent 100%
+  );
+  z-index: -1;
+  transition: opacity 0.4s ease;
+}
+
+/* Make header completely clear when on Home Hero */
+body.on-home-hero .app-header::before {
+  opacity: 0;
+}
+
+.header-container {
+  width: 100%;
+  padding: 0 40px 0 104px; /* Balanced side padding */
+  height: 80px;
+  display: grid;
+  grid-template-columns: 1fr auto 1fr; /* 3-column grid for perfect centering */
+  align-items: center;
+  gap: 24px;
+  pointer-events: auto;
+}
+
+.header-title-section {
+  display: flex;
+  align-items: center;
+  min-width: 0;
+}
+
+.header-page-title {
+  font-size: 24px;
+  font-weight: 800;
+  color: var(--md-sys-color-primary);
+  margin: 0;
+  white-space: nowrap;
+  letter-spacing: -0.5px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Search Section - Centered */
+.header-search {
+  width: 450px; /* Slightly wider for better presence */
+  display: flex;
+  justify-content: center;
+  opacity: 1;
+  transform: translateY(0);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Hide header search when on Home Hero (controlled by JSX class) */
+.header-search.hidden-on-hero {
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(-15px);
+}
+
+/* Actions Area (Profile) - Right Aligned */
+.header-actions {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+}
+
+/* Tablet and mobile responsive */
+@media (max-width: 1024px) {
+  .app-header { height: 72px; }
+  .header-container { padding: 0 24px 0 104px; height: 72px; }
+}
+
+@media (max-width: 768px) {
+  .app-header.is-home {
+    display: none !important;
+  }
+
+  .app-header {
+    height: 56px;
+  }
+
+  .app-header::before {
+    height: 56px; /* Match header height exactly */
+    background: rgba(30, 24, 20, 0.95);
+  }
+
+  .header-container {
+    padding: 0 16px;
+    height: 56px;
+    display: flex; /* Back to flex for mobile */
+    justify-content: space-between;
+    gap: 8px;
+  }
+
+  .header-page-title {
+    font-size: 18px;
+  }
+
+  .header-title-section {
+    display: none; 
+  }
+
+  .header-actions {
+    display: none;
+  }
+
+  .header-search {
+    flex: 1;
+    max-width: 100% !important;
+    width: 100% !important;
+    margin: 0;
+    padding-top: 4px; /* Move search bar away from top edge */
+  }
+}

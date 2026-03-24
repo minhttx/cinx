@@ -1,0 +1,189 @@
+/* 
+ * CarouselManagement.css - CinemaHub Admin Theme
+ */
+
+.carousel-management {
+  padding: 2rem;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.cm-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+}
+
+.cm-header h2 {
+  margin: 0;
+  color: #ffffff;
+  font-family: var(--md-sys-font-family);
+  font-weight: 800;
+}
+
+.cm-item-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.cm-item {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  padding: 1.25rem;
+  background-color: var(--md-sys-color-surface-container);
+  border: 1px solid rgba(228, 189, 102, 0.1);
+  border-radius: 16px;
+  transition: all 0.3s ease;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+}
+
+.cm-item:hover {
+  transform: translateX(8px);
+  border-color: rgba(228, 189, 102, 0.3);
+  background-color: rgba(228, 189, 102, 0.02);
+}
+
+.cm-item.inactive {
+  opacity: 0.5;
+  filter: grayscale(1);
+}
+
+.cm-item-thumbnail {
+  width: 140px;
+  height: 80px;
+  object-fit: cover;
+  border-radius: 12px;
+  border: 1px solid rgba(228, 189, 102, 0.2);
+}
+
+.cm-item-info {
+  flex-grow: 1;
+}
+
+.cm-item-info h3 {
+  margin: 0 0 6px 0;
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #ffffff;
+}
+
+.cm-item-info p {
+  margin: 0;
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.cm-item-actions {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+/* Modal Styles */
+.cm-modal-backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(30, 24, 20, 0.6);
+  backdrop-filter: blur(15px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 2000;
+}
+
+.cm-modal-content {
+  background-color: var(--md-sys-color-surface-container-high);
+  padding: 2.5rem;
+  border-radius: 24px;
+  width: 90%;
+  max-width: 600px;
+  position: relative;
+  border: 1px solid rgba(228, 189, 102, 0.2);
+  box-shadow: 0 24px 64px rgba(0, 0, 0, 0.6);
+}
+
+.cm-modal-close {
+  position: absolute;
+  top: 1.5rem;
+  right: 1.5rem;
+  background: rgba(255, 255, 255, 0.05);
+  border: none;
+  color: #ffffff;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Form Styles consistent with other admin pages */
+.cm-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.cm-form label {
+  font-size: 12px;
+  font-weight: 800;
+  text-transform: uppercase;
+  color: var(--md-sys-color-primary);
+  margin-bottom: 8px;
+  letter-spacing: 1px;
+}
+
+.cm-form input[type="text"],
+.cm-form input[type="number"],
+.cm-form textarea {
+  padding: 1rem 1.25rem;
+  border: 1px solid rgba(228, 189, 102, 0.1);
+  border-radius: 12px;
+  background-color: rgba(228, 189, 102, 0.05);
+  color: #ffffff;
+  font-size: 15px;
+  transition: all 0.3s;
+}
+
+.cm-form input:focus, .cm-form textarea:focus {
+  outline: none;
+  border-color: var(--md-sys-color-primary);
+  background-color: rgba(228, 189, 102, 0.1);
+}
+
+/* M3 Switch Refined */
+.cm-switch {
+  position: relative;
+  display: inline-block;
+  width: 50px;
+  height: 26px;
+}
+.cm-switch input { opacity: 0; width: 0; height: 0; }
+.cm-slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background-color: rgba(255, 255, 255, 0.1);
+  transition: .4s;
+  border-radius: 34px;
+}
+.cm-slider:before {
+  position: absolute;
+  content: "";
+  height: 18px;
+  width: 18px;
+  left: 4px;
+  bottom: 4px;
+  background-color: #ffffff;
+  transition: .4s;
+  border-radius: 50%;
+}
+input:checked + .cm-slider { background-color: var(--md-sys-color-primary); }
+input:checked + .cm-slider:before { transform: translateX(24px); background-color: #1E1814; }

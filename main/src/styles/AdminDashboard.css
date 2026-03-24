@@ -1,0 +1,473 @@
+/*
+ * AdminDashboard.css - Fullscreen Standalone Admin UI
+ * Synced with CinemaHub main website theme
+ */
+
+.admin-dashboard-layout {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  width: 100vw;
+  background-color: #1E1814; /* Match main website dark brown */
+  color: #ffffff;
+  overflow: hidden;
+  font-family: var(--md-sys-font-family);
+  color-scheme: dark; /* Force native UI elements (date pickers, scrollbars) to dark mode */
+}
+
+/* --- GLOBAL DARK THEME FIXES FOR FORM ELEMENTS --- */
+:root {
+  color-scheme: dark;
+}
+
+/* Force dark background for all native pickers and inputs */
+select, 
+input, 
+textarea,
+option {
+  color-scheme: dark !important;
+  background-color: #2D241E !important; /* md-sys-color-surface-container */
+  color: #ffffff !important;
+  border-color: rgba(228, 189, 102, 0.2) !important;
+}
+
+/* Fix for Chrome/Safari/Edge dropdown list background and visibility */
+select option {
+  background-color: #2D241E !important;
+  color: #ffffff !important;
+}
+
+/* Custom dropdown arrow for dark theme */
+select {
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' height='24' viewBox='0 -960 960 960' width='24' fill='%23E4BD66'%3E%3Cpath d='M480-345 240-585l56-56 184 184 184-184 56 56-240 240Z'/%3E%3C/svg%3E") !important;
+  background-repeat: no-repeat !important;
+  background-position: right 12px center !important;
+  background-size: 18px !important;
+  padding-right: 40px !important;
+}
+
+/* Fix for Calendar Picker (Date Input) */
+input[type="date"]::-webkit-calendar-picker-indicator {
+  filter: invert(0.8) sepia(1) saturate(5) hue-rotate(15deg) !important; /* Gold-ish icon */
+  cursor: pointer;
+}
+
+/* Global Scrollbar Styling for Admin */
+.admin-main-content::-webkit-scrollbar,
+.admin-sidebar::-webkit-scrollbar,
+.drawer-body-main::-webkit-scrollbar {
+  width: 8px;
+}
+
+.admin-main-content::-webkit-scrollbar-track,
+.admin-sidebar::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.2);
+}
+
+.admin-main-content::-webkit-scrollbar-thumb,
+.admin-sidebar::-webkit-scrollbar-thumb {
+  background: rgba(228, 189, 102, 0.2);
+  border-radius: 10px;
+}
+
+.admin-main-content::-webkit-scrollbar-thumb:hover {
+  background: rgba(228, 189, 102, 0.4);
+}
+
+/* Admin Header */
+.admin-header {
+  height: 64px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 24px;
+  background-color: rgba(30, 24, 20, 0.95);
+  border-bottom: 1px solid rgba(228, 189, 102, 0.1);
+  backdrop-filter: blur(10px);
+  z-index: 100;
+}
+
+.admin-header-left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.admin-breadcrumb {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.breadcrumb-separator {
+  font-family: 'Material Symbols Outlined';
+  font-size: 20px;
+  color: rgba(255, 255, 255, 0.3);
+  user-select: none;
+}
+
+.admin-module-title {
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--md-sys-color-primary); /* Gold color for the active module */
+}
+
+.admin-header-actions {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-left: 24px;
+  padding-left: 24px;
+  border-left: 1px solid rgba(228, 189, 102, 0.1);
+}
+
+.action-icon-btn {
+  background: none;
+  border: none;
+  color: var(--md-sys-color-primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  padding: 4px;
+  border-radius: 50%;
+  transition: all 0.2s;
+}
+
+.action-icon-btn:hover {
+  background-color: rgba(228, 189, 102, 0.1);
+  transform: scale(1.1);
+}
+
+.action-icon-btn .material-symbols-outlined {
+  font-size: 28px;
+}
+
+.header-select {
+  background-color: rgba(228, 189, 102, 0.05);
+  border: 1px solid rgba(228, 189, 102, 0.2);
+  color: #ffffff;
+  padding: 6px 16px;
+  border-radius: 100px;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  outline: none;
+  transition: all 0.2s;
+}
+
+.header-select:hover {
+  background-color: rgba(228, 189, 102, 0.1);
+  border-color: var(--md-sys-color-primary);
+}
+
+.admin-logo-icon {
+  color: var(--md-sys-color-primary);
+  font-size: 28px;
+}
+
+.admin-header-title {
+  margin: 0;
+  font-family: var(--md-sys-font-family);
+  font-size: 20px;
+  font-weight: 800;
+  color: #ffffff;
+  letter-spacing: 0.5px;
+}
+
+.open-site-btn {
+  height: 40px !important;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  text-decoration: none;
+  border-radius: 100px !important;
+  padding: 0 20px !important;
+  font-size: 14px !important;
+  font-weight: 700 !important;
+}
+
+/* Admin Body Container */
+.admin-body {
+  display: flex;
+  flex: 1;
+  overflow: hidden;
+}
+
+/* Sidebar */
+.admin-sidebar {
+  width: 260px;
+  min-width: 260px; /* Force fixed width */
+  flex-shrink: 0; /* Prevent shrinking in flex container */
+  background-color: rgba(45, 36, 30, 0.4);
+  display: flex;
+  flex-direction: column;
+  padding: 1.5rem 1rem;
+  border-right: 1px solid rgba(228, 189, 102, 0.1);
+}
+
+/* M3 Navigation Tabs (Vertical) */
+.admin-nav {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.admin-nav-item {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 0.75rem 1.25rem;
+  border-radius: 12px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  text-align: left;
+  color: rgba(255, 255, 255, 0.7);
+  transition: all 0.2s ease;
+}
+
+.admin-nav-item .material-symbols-outlined {
+  font-size: 22px;
+}
+
+.admin-nav-item .nav-label {
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.admin-nav-item:hover {
+  background-color: rgba(228, 189, 102, 0.05);
+  color: #ffffff;
+}
+
+.admin-nav-item.active {
+  background-color: var(--md-sys-color-primary);
+  color: #1E1814; /* Dark text on gold bg */
+}
+
+.admin-nav-item.active .material-symbols-outlined {
+  font-variation-settings: "FILL" 1;
+}
+
+/* Main Content Area */
+.admin-main-content {
+  flex-grow: 1;
+  padding: 2rem;
+  overflow-y: auto;
+  background-color: transparent;
+}
+
+/* M3 Button Styles - CinemaHub Admin Theme */
+.m3-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 0 24px;
+  height: 44px;
+  border-radius: 100px;
+  border: none;
+  font-family: var(--md-sys-font-family);
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.m3-btn-filled {
+  background-color: var(--md-sys-color-primary);
+  color: var(--md-sys-color-on-primary);
+}
+
+.m3-btn-filled:hover {
+  box-shadow: 0 4px 12px rgba(228, 189, 102, 0.3);
+  transform: translateY(-2px);
+}
+
+.m3-btn-tonal {
+  background-color: rgba(228, 189, 102, 0.1);
+  color: var(--md-sys-color-primary);
+  border: 1px solid rgba(228, 189, 102, 0.2);
+}
+
+.m3-btn-tonal:hover {
+  background-color: rgba(228, 189, 102, 0.15);
+}
+
+.m3-btn-outlined {
+  background-color: transparent;
+  color: var(--md-sys-color-primary);
+  border: 1px solid rgba(228, 189, 102, 0.4);
+}
+
+.m3-btn-outlined:hover {
+  background-color: rgba(228, 189, 102, 0.05);
+  border-color: var(--md-sys-color-primary);
+}
+
+.m3-btn-text {
+  background-color: transparent;
+  color: var(--md-sys-color-primary);
+  padding: 0 16px;
+}
+
+.m3-btn-text:hover {
+  background-color: rgba(228, 189, 102, 0.05);
+}
+
+.m3-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+.m3-btn-sm {
+  height: 36px;
+  padding: 0 16px;
+  font-size: 13px;
+}
+
+.m3-btn .material-symbols-outlined {
+  font-size: 20px;
+}
+
+/* Global Admin Card Style */
+.admin-card {
+  background-color: var(--md-sys-color-surface-container);
+  border-radius: 20px;
+  border: 1px solid rgba(228, 189, 102, 0.1);
+  overflow: hidden;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.4);
+  display: flex;
+  flex-direction: column;
+}
+
+.admin-card:hover {
+  transform: translateY(-6px);
+  border-color: rgba(228, 189, 102, 0.3);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.6);
+}
+
+/* Mobile Access Restriction Overlay */
+.mobile-restriction-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: #1E1814;
+  z-index: 9999;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 24px;
+}
+
+.restriction-card {
+  background-color: var(--md-sys-color-surface-container-high);
+  padding: 40px;
+  border-radius: 28px;
+  text-align: center;
+  max-width: 450px;
+  border: 1px solid rgba(228, 189, 102, 0.2);
+  box-shadow: 0 24px 64px rgba(0, 0, 0, 0.6);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+}
+
+.restriction-icon {
+  font-size: 64px !important;
+  color: var(--md-sys-color-primary);
+  opacity: 0.5;
+}
+
+.restriction-card h2 {
+  margin: 0;
+  font-size: 24px;
+  font-weight: 800;
+  color: #ffffff;
+}
+
+.restriction-card p {
+  font-size: 15px;
+  color: rgba(255, 255, 255, 0.6);
+  line-height: 1.6;
+  margin: 0 0 12px 0;
+}
+
+/* Loading Utilities */
+.loading-spinner-sm {
+  width: 16px;
+  height: 16px;
+  border: 2px solid rgba(228, 189, 102, 0.2);
+  border-top: 2px solid currentColor;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+  display: inline-block;
+  margin-right: 8px;
+  vertical-align: middle;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* Responsive */
+@media screen and (max-width: 768px) {
+  .admin-header {
+    padding: 0 16px;
+  }
+  
+  .admin-header-title {
+    font-size: 16px;
+  }
+
+  .open-site-btn span:last-child {
+    display: none; /* Hide text on mobile, keep icon */
+  }
+
+  .admin-body {
+    flex-direction: column;
+  }
+
+  .admin-sidebar {
+    width: 100%;
+    height: auto;
+    padding: 0.5rem;
+    border-right: none;
+    border-bottom: 1px solid rgba(228, 189, 102, 0.1);
+  }
+
+  .admin-nav {
+    flex-direction: row;
+    overflow-x: auto;
+    scrollbar-width: none;
+    padding: 4px;
+  }
+
+  .admin-nav::-webkit-scrollbar { display: none; }
+
+  .admin-nav-item {
+    flex-direction: column;
+    gap: 4px;
+    padding: 8px 16px;
+    border-radius: 8px;
+    flex-shrink: 0;
+    align-items: center;
+  }
+
+  .admin-nav-item .nav-label {
+    font-size: 11px;
+  }
+
+  .admin-main-content {
+    padding: 1rem;
+  }
+}

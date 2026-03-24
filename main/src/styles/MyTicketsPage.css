@@ -1,0 +1,178 @@
+/* MyTicketsPage.css - Unified Horizontal Carousel with Visible 50% Scrollbar */
+
+.my-tickets-page {
+  padding: 0;
+  background-color: transparent !important;
+  height: calc(100vh - 80px); 
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  overflow: hidden;
+  box-sizing: border-box;
+}
+
+.carousel-wrapper {
+  position: relative;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  -webkit-mask-image: linear-gradient(to right, transparent, black 20%, black 80%, transparent);
+  mask-image: linear-gradient(to right, transparent, black 20%, black 80%, transparent);
+}
+
+.tickets-grid {
+  display: flex;
+  flex-direction: row;
+  gap: 2.5rem; 
+  width: 100%;
+  overflow-x: auto;
+  padding: 2rem 20% 4rem 20%; 
+  scroll-snap-type: x mandatory;
+  scroll-behavior: smooth;
+  -webkit-overflow-scrolling: touch;
+  box-sizing: border-box;
+}
+
+/* Hide scrollbar */
+.tickets-grid::-webkit-scrollbar { display: none; }
+
+.ticket-stub {
+  flex: 0 0 300px; 
+  scroll-snap-align: center;
+  background: white;
+  border-radius: 12px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+  position: relative;
+  height: auto;
+}
+
+.ticket-stub:hover {
+  box-shadow: 0 8px 24px rgba(0,0,0,0.2);
+  transform: translateY(-4px);
+}
+
+/* Nav Buttons - Floating */
+.nav-btn {
+  position: absolute;
+  top: 45%;
+  transform: translateY(-50%);
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background-color: rgba(30, 24, 20, 0.9);
+  border: none;
+  color: var(--md-sys-color-primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 100;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  backdrop-filter: blur(12px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
+}
+
+.nav-btn:hover:not(:disabled) {
+  background-color: var(--md-sys-color-primary);
+  color: var(--md-sys-color-on-primary);
+  transform: translateY(-50%) scale(1.1);
+  box-shadow: 0 12px 32px rgba(228, 189, 102, 0.3);
+}
+
+.nav-btn:disabled {
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(-50%) scale(0.8);
+}
+
+.nav-btn.prev { left: 5%; }
+.nav-btn.next { right: 5%; }
+
+/* Poster Section */
+.ticket-poster-section { position: relative; overflow: hidden; aspect-ratio: 2/3; width: 100%; }
+.ticket-poster-crop { width: 100%; height: 100%; object-fit: cover; transition: transform 0.4s ease; }
+.ticket-stub:hover .ticket-poster-crop { transform: scale(1.05); }
+.ticket-overlay-gradient { position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: linear-gradient(to top, rgba(0, 0, 0, 0.6) 0%, transparent 40%); }
+
+/* Info Section - GOLD Background */
+.ticket-info-section {
+  padding: 16px;
+  background-color: #E4BD66; /* Gold */
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  border-top: 1px solid rgba(67, 49, 16, 0.1);
+  color: #433110 !important; /* Force dark brown for all content here */
+}
+
+.ticket-perforation { position: absolute; top: 0; left: 0; right: 0; height: 1px; border-top: 2px dashed rgba(67, 49, 16, 0.2); z-index: 5; margin-top: -1px; }
+.ticket-perforation::before, .ticket-perforation::after { content: ''; position: absolute; top: -10px; width: 20px; height: 20px; background-color: #1E1814; border-radius: 50%; }
+.ticket-perforation::before { left: -10px; }
+.ticket-perforation::after { right: -10px; }
+
+/* TEXT COLORS ON GOLD BACKGROUND - FORCED DARK BROWN */
+.ticket-movie-title { 
+  font-size: 16px; 
+  font-weight: 800; 
+  margin: 0 0 12px 0; 
+  color: #433110 !important; 
+  white-space: nowrap; 
+  overflow: hidden; 
+  text-overflow: ellipsis; 
+}
+
+.ticket-details-row { display: flex; justify-content: flex-start; margin-bottom: 6px; gap: 12px; }
+.ticket-detail { display: flex; flex-direction: column; flex: 1; min-width: 0; }
+
+.detail-label { 
+  font-size: 9px; 
+  text-transform: uppercase; 
+  color: rgba(67, 49, 16, 0.7) !important; 
+  font-weight: 700; 
+  letter-spacing: 0.5px; 
+  margin-bottom: 2px; 
+}
+
+.detail-value { 
+  font-size: 12px; 
+  font-weight: 800; 
+  color: #433110 !important; 
+  white-space: nowrap; 
+  overflow: hidden; 
+  text-overflow: ellipsis; 
+}
+
+/* Sidebar QR & No Tickets remain the same... */
+.no-tickets { display: flex; flex-direction: column; align-items: center; justify-content: center; flex: 1; width: 100%; text-align: center; color: var(--md-sys-color-on-surface-variant); }
+.empty-icon { font-size: 80px !important; margin-bottom: 1.5rem; color: var(--md-sys-color-primary); opacity: 0.4; }
+.no-tickets h3 { font-size: 24px; font-weight: 800; margin-bottom: 0.5rem; color: var(--md-sys-color-on-surface); }
+
+.ticket-sidebar-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background-color: rgba(0, 0, 0, 0.4); backdrop-filter: blur(4px); z-index: 2000; opacity: 0; visibility: hidden; transition: all 0.3s ease; }
+.ticket-sidebar-overlay.open { opacity: 1; visibility: visible; }
+.ticket-sidebar { position: fixed; top: 0; right: 0; width: 450px; height: 100vh; background-color: var(--md-sys-color-surface-container-low); z-index: 2001; transform: translateX(100%); transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1); display: flex; flex-direction: column; box-shadow: var(--md-sys-elevation-4); border-left: 1px solid var(--md-sys-color-outline-variant); }
+.ticket-sidebar.open { transform: translateX(0); }
+.sidebar-close-btn { position: absolute; top: 20px; right: 20px; background: rgba(0,0,0,0.2); border: none; cursor: pointer; color: var(--md-sys-color-on-surface); width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; z-index: 10; }
+.ticket-details-content { flex: 1; display: flex; flex-direction: column; align-items: center; text-align: center; padding: 60px 40px 40px; overflow-y: auto; }
+.sidebar-title { font-size: 24px; font-weight: 800; color: var(--md-sys-color-primary); margin-bottom: 32px; }
+.qr-container { background: white; padding: 24px; border-radius: 24px; box-shadow: var(--md-sys-elevation-2); margin-bottom: 32px; width: 250px; }
+.qr-image { width: 100%; height: auto; }
+.booking-id-text { margin-top: 16px; font-family: monospace; color: #333; font-weight: bold; font-size: 14px; }
+.booking-summary-details { width: 100%; background: var(--md-sys-color-surface-container-high); padding: 24px; border-radius: 20px; display: flex; flex-direction: column; gap: 16px; border: 1px solid var(--md-sys-color-outline-variant); }
+.summary-item { display: flex; justify-content: space-between; font-size: 14px; }
+.summary-item span { color: var(--md-sys-color-outline); font-weight: 600; }
+.summary-item strong { color: var(--md-sys-color-on-surface); text-align: right; flex: 1; padding-left: 20px; }
+.summary-item.total { border-top: 1px solid var(--md-sys-color-outline-variant); padding-top: 16px; margin-top: 8px; }
+.summary-item.total span { color: var(--md-sys-color-on-surface); font-size: 16px; }
+.summary-item.total strong { color: var(--md-sys-color-primary); font-size: 20px; }
+
+@media (max-width: 768px) {
+  .nav-btn { display: none; }
+  .tickets-grid { padding: 1rem 20% 2rem 20%; }
+  .ticket-stub { flex: 0 0 260px; }
+  .ticket-sidebar { width: 100%; }
+}

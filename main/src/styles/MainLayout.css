@@ -1,0 +1,61 @@
+/* 
+ * MainLayout.css - Refactored for M3 Navigation Rail with Header
+ */
+
+.main-layout {
+  display: flex;
+  flex-direction: column;
+  background-color: transparent !important;
+  min-height: 100vh;
+}
+
+/* Layout body contains navigation rail and main content */
+.layout-body {
+  display: flex;
+  flex: 1;
+  background-color: transparent !important;
+}
+
+.main-content {
+  flex-grow: 1;
+  margin-left: 80px; /* This must be the same as the .nav-rail width */
+  width: calc(100% - 80px);
+  min-height: calc(100vh - 80px); /* Subtract header height */
+  display: flex;
+  flex-direction: column;
+  background: transparent !important;
+  padding-top: 0; /* Removed padding to reduce gap with header */
+}
+
+/* The Outlet content will grow to fill the space */
+.main-content > * {
+  flex-grow: 1;
+}
+
+/* Responsive: On smaller screens, adjust layout */
+@media screen and (max-width: 768px) {
+  .main-content {
+    margin-left: 0;
+    width: 100%;
+    /* Exact visible area height: Viewport - Header(56) - BottomBar(64) */
+    min-height: calc(100vh - 56px - 64px); 
+    padding-top: 0;
+    padding-bottom: 0; 
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+  }
+}
+
+@media screen and (max-width: 480px) {
+  .main-content {
+    padding-top: 0;
+  }
+}
+
+/* Dark mode adjustments */
+@media (prefers-color-scheme: dark) {
+  .main-content {
+    background: var(--md-sys-color-background);
+  }
+}

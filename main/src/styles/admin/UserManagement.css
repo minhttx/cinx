@@ -1,0 +1,84 @@
+/* UserManagement.css - CinX Admin */
+
+.user-management-container {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.filter-card {
+  display: flex;
+  gap: 1rem;
+  background-color: var(--md-sys-color-surface-container-low);
+  padding: 1.5rem;
+  border-radius: 20px;
+  border: 1px solid rgba(228, 189, 102, 0.1);
+  align-items: center;
+}
+
+.user-info-cell {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.user-name {
+  font-weight: 800;
+  color: #ffffff;
+  font-size: 15px;
+}
+
+.user-email {
+  font-size: 13px;
+  opacity: 0.5;
+}
+
+.status-active {
+  background-color: rgba(76, 175, 80, 0.1);
+  color: #4CAF50;
+  padding: 4px 12px;
+  border-radius: 100px;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.status-banned {
+  background-color: rgba(244, 67, 54, 0.1);
+  color: #f44336;
+  padding: 4px 12px;
+  border-radius: 100px;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.table-inline-select {
+  background: rgba(228, 189, 102, 0.05);
+  border: 1px solid rgba(228, 189, 102, 0.1);
+  color: #ffffff;
+  padding: 6px 12px;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  outline: none;
+  transition: all 0.2s;
+}
+
+.table-inline-select:hover {
+  background: rgba(228, 189, 102, 0.1);
+  border-color: var(--md-sys-color-primary);
+}
+
+.no-results {
+  padding: 3rem;
+  text-align: center;
+  opacity: 0.5;
+  font-style: italic;
+}
+
+@media (max-width: 1024px) {
+  .filter-card {
+    flex-direction: column;
+    align-items: stretch;
+  }
+}

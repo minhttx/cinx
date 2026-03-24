@@ -1,0 +1,139 @@
+/* Search Bar - Classic Cinema Theme */
+.search-bar {
+  width: 100%;
+  max-width: 400px;
+  margin: 0 auto; /* Added to ensure centering in all containers */
+}
+
+@media (max-width: 768px) {
+  .search-bar {
+    max-width: 100% !important;
+    width: 100% !important;
+  }
+}
+
+.search-container {
+  position: relative;
+  display: flex;
+  align-items: center;
+  width: 100%;
+  background: var(--md-sys-color-surface-container);
+  border-radius: 20px; /* Changed from 28px to 10px */
+  height: 48px;
+  transition: all 0.2s cubic-bezier(0.4, 0.0, 0.2, 1);
+  border: 1px solid var(--md-sys-color-outline-variant);
+  overflow: hidden;
+  box-shadow: var(--md-sys-elevation-1);
+}
+
+.search-container:hover {
+  box-shadow: var(--md-sys-elevation-2);
+  /* Removed border-color: var(--md-sys-color-primary) */
+}
+
+.search-container.focused {
+  background: var(--md-sys-color-surface-container);
+  box-shadow: var(--md-sys-elevation-3);
+  /* Removed border-color: var(--md-sys-color-primary) */
+}
+
+/* Search Icon Button */
+.search-icon-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--md-sys-color-primary);
+  border-radius: 10px; /* Match container */
+  transition: all 0.2s ease;
+  flex-shrink: 0;
+}
+
+.search-icon-button .material-symbols-outlined {
+  font-size: 24px;
+}
+
+/* Search Input */
+.search-input {
+  flex: 1;
+  height: 100%;
+  border: none;
+  background: none;
+  outline: none;
+  padding: 0 16px 0 0;
+  font-family: var(--md-sys-font-family);
+  font-size: 16px;
+  color: var(--md-sys-color-on-surface);
+}
+
+.search-input::placeholder {
+  color: var(--md-sys-color-outline);
+  opacity: 0.8;
+}
+
+/* CinX Inline Button */
+.search-divider {
+  width: 1px;
+  height: 24px;
+  background-color: var(--md-sys-color-outline-variant);
+  margin: 0 8px;
+  opacity: 0.5;
+}
+
+.cinx-inline-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px; /* Slightly smaller for all-round compatibility */
+  height: 32px;
+  background-color: var(--md-sys-color-primary-container);
+  color: var(--md-sys-color-primary);
+  border: none;
+  border-radius: 50%;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  margin-right: 6px;
+  flex-shrink: 0;
+}
+
+.cinx-inline-button:hover {
+  background-color: var(--md-sys-color-primary);
+  color: var(--md-sys-color-on-primary);
+  transform: scale(1.1);
+}
+
+.cinx-inline-button .material-symbols-outlined {
+  font-size: 18px; /* Proportional icon size */
+}
+
+/* Clear Button */
+.clear-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--md-sys-color-outline);
+  border-radius: 50%;
+  transition: all 0.2s ease;
+  margin-right: 4px;
+  flex-shrink: 0;
+}
+
+.clear-button:hover {
+  color: var(--md-sys-color-primary);
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .search-container {
+    height: 48px;
+  }
+}

@@ -1,0 +1,56 @@
+/*
+ * Material Design 3 (M3) Design Tokens - Classic Cinema Theme (Brown & Gold)
+ */
+@import url('https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;700&display=swap');
+
+:root {
+  /* Classic Cinema Color Palette */
+  --md-sys-color-primary: #E4BD66;
+  --md-sys-color-on-primary: #433110;
+  --md-sys-color-primary-container: #5C4B1F;
+  --md-sys-color-on-primary-container: #F2D299;
+  
+  --md-sys-color-secondary: #D2C1B0;
+  --md-sys-color-on-secondary: #382E24;
+  --md-sys-color-secondary-container: #4F4439;
+  --md-sys-color-on-secondary-container: #EFDFD3;
+  
+  --md-sys-color-background: transparent; 
+  --md-sys-color-on-background: #F2D299; /* Soft Gold Text */
+  
+  --md-sys-color-surface: transparent;
+  --md-sys-color-on-surface: #F2D299;
+  
+  --md-sys-color-surface-variant: #4F4439;
+  --md-sys-color-on-surface-variant: #D2C1B0;
+  
+  --md-sys-color-outline: #9C8E80;
+  --md-sys-color-outline-variant: #433110;
+  
+  --md-sys-color-surface-container-lowest: #14100D;
+  --md-sys-color-surface-container-low: #251E1A;
+  --md-sys-color-surface-container: #2D241E; /* Lighter brown for cards */
+  --md-sys-color-surface-container-high: #382E24;
+  --md-sys-color-surface-container-highest: #43392F;
+
+  --md-sys-color-error: #FFB4AB;
+  --md-sys-color-on-error: #690005;
+
+  /* Typography Tokens */
+  --md-sys-font-family: 'Manrope', sans-serif;
+
+  /* M3 Shape Tokens */
+  --md-sys-shape-corner-none: 0px;
+  --md-sys-shape-corner-extra-small: 4px;
+  --md-sys-shape-corner-small: 8px;
+  --md-sys-shape-corner-medium: 12px;
+  --md-sys-shape-corner-large: 16px;
+  --md-sys-shape-corner-extra-large: 28px;
+  --md-sys-shape-corner-full: 9999px;
+
+  /* Elevation Tokens - Adjusted for Dark Brown theme */
+  --md-sys-elevation-1: 0px 1px 3px rgba(0, 0, 0, 0.4);
+  --md-sys-elevation-2: 0px 2px 6px rgba(0, 0, 0, 0.5);
+  --md-sys-elevation-3: 0px 4px 12px rgba(0, 0, 0, 0.6);
+  --md-sys-elevation-4: 0px 8px 24px rgba(0, 0, 0, 0.7);
+}

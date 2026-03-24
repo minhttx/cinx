@@ -1,0 +1,125 @@
+/* CommentModeration.css - CinX Admin */
+
+.comment-moderation {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.moderation-filter-tabs {
+  display: flex;
+  gap: 12px;
+  background: rgba(228, 189, 102, 0.05);
+  padding: 6px;
+  border-radius: 100px;
+  width: fit-content;
+}
+
+.mod-tab {
+  padding: 10px 24px;
+  border: none;
+  background: none;
+  color: rgba(255, 255, 255, 0.6);
+  font-weight: 700;
+  font-size: 14px;
+  border-radius: 100px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.mod-tab.active {
+  background: var(--md-sys-color-primary);
+  color: #1E1814;
+}
+
+.moderation-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
+  gap: 1.5rem;
+}
+
+.moderation-card {
+  padding: 1.5rem !important;
+  min-height: auto !important;
+}
+
+.mod-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.movie-tag {
+  background: rgba(228, 189, 102, 0.1);
+  color: var(--md-sys-color-primary);
+  padding: 4px 12px;
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+
+.rating-tag {
+  font-weight: 800;
+  color: var(--md-sys-color-primary);
+  font-size: 14px;
+}
+
+.mod-card-body {
+  margin-bottom: 1.5rem;
+}
+
+.author-row {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin-bottom: 12px;
+}
+
+.author-name {
+  font-weight: 800;
+  color: #ffffff;
+  font-size: 15px;
+}
+
+.post-date {
+  font-size: 12px;
+  opacity: 0.4;
+}
+
+.comment-text-content {
+  line-height: 1.6;
+  color: rgba(255, 255, 255, 0.8);
+  font-style: italic;
+  margin: 0;
+}
+
+.mod-card-actions {
+  display: flex;
+  gap: 12px;
+  padding-top: 1rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.danger-btn {
+  color: #ff4444 !important;
+  border-color: rgba(255, 68, 68, 0.3) !important;
+}
+
+.danger-btn:hover {
+  background-color: rgba(255, 68, 68, 0.05) !important;
+  border-color: #ff4444 !important;
+}
+
+.empty-moderation {
+  grid-column: 1 / -1;
+  text-align: center;
+  padding: 5rem;
+  opacity: 0.3;
+}
+
+.empty-moderation .material-symbols-outlined {
+  font-size: 64px;
+  margin-bottom: 1rem;
+}

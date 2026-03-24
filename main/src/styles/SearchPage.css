@@ -1,0 +1,94 @@
+.search-page {
+  padding-top: 2rem;
+}
+
+.search-header-actions {
+  margin-bottom: 2rem;
+}
+
+.back-btn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: none;
+  border: none;
+  color: var(--md-sys-color-primary);
+  font-family: var(--md-sys-font-family);
+  font-weight: 600;
+  cursor: pointer;
+  padding: 8px 16px;
+  border-radius: var(--md-sys-shape-corner-full);
+  transition: background-color 0.2s;
+}
+
+.back-btn:hover {
+  background-color: var(--md-sys-color-primary-container);
+}
+
+.results-count {
+  margin-left: auto;
+  font-size: 14px;
+  color: var(--md-sys-color-on-surface-variant);
+  font-weight: 500;
+}
+
+.search-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: 4rem 2rem;
+}
+
+.empty-icon {
+  margin-bottom: 1.5rem;
+  color: var(--md-sys-color-on-surface-variant);
+  opacity: 0.5;
+}
+
+.empty-icon .material-symbols-outlined {
+  font-size: 80px;
+}
+
+.search-empty h3 {
+  font-size: 24px;
+  margin-bottom: 1rem;
+  color: var(--md-sys-color-on-surface);
+}
+
+.search-empty p {
+  color: var(--md-sys-color-on-surface-variant);
+  margin-bottom: 0.5rem;
+}
+
+.search-suggestions {
+  text-align: left;
+  display: inline-block;
+  margin-top: 1rem;
+  padding-left: 1.5rem;
+  color: var(--md-sys-color-on-surface-variant);
+}
+
+.search-suggestions li {
+  margin-bottom: 0.5rem;
+}
+
+.mt-4 {
+  margin-top: 2rem;
+}
+
+/* Ensure cards in search results are consistent */
+.search-page .movies-grid {
+  margin-top: 1rem;
+}
+
+@media (max-width: 768px) {
+  .search-page {
+    padding-top: 1rem;
+    padding-bottom: 80px;
+  }
+  
+  .results-count {
+    display: none;
+  }
+}

@@ -1,0 +1,173 @@
+/* 
+ * MovieCard.css - Refactored with Material Design 3 Tokens 
+ */
+
+.movie-card {
+  /* Using a surface color for the card background */
+  background-color: var(--md-sys-color-surface-container-low);
+  border-radius: var(--md-sys-shape-corner-medium); /* 12px */
+  border: 1px solid var(--md-sys-color-outline-variant);
+  overflow: hidden;
+  transition: box-shadow 0.2s ease-in-out, background-color 0.2s ease-in-out;
+  
+  /* M3 Elevation Level 1 */
+  box-shadow: var(--md-sys-elevation-1);
+}
+
+.movie-card:hover {
+  /* M3 Elevation Level 2 on hover for feedback */
+  box-shadow: var(--md-sys-elevation-2);
+  background-color: var(--md-sys-color-surface-container);
+  cursor: pointer;
+}
+
+.movie-poster {
+  position: relative;
+  overflow: hidden;
+  aspect-ratio: 2/3;
+  /* The poster itself doesn't need a border-radius as the parent card clips it */
+}
+
+.movie-poster img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.movie-card:hover .movie-poster img {
+  transform: scale(1.05);
+}
+
+.movie-rating {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  background-color: rgba(30, 24, 20, 0.85); /* Deep dark brown */
+  color: var(--md-sys-color-primary); /* Gold text */
+  padding: 4px 10px;
+  border-radius: var(--md-sys-shape-corner-full);
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(228, 189, 102, 0.2);
+  z-index: 5;
+  display: inline-flex;
+  align-items: center;
+  width: fit-content;
+  white-space: nowrap;
+
+  /* M3 Label Medium Typography */
+  font-family: var(--md-sys-typescale-label-medium-font);
+  font-size: 12px;
+  font-weight: 800;
+}
+
+.age-badge {
+  position: absolute;
+  top: 10px;
+  right: 10px; /* Placed on right */
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 12px;
+  font-weight: 900;
+  color: white;
+  background-color: #43392F; /* Default background */
+  z-index: 10;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: fit-content;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.5);
+  text-shadow: 0 1px 2px rgba(0,0,0,0.5);
+}
+
+.age-p { background-color: #4CAF50; }
+.age-k { background-color: #2196F3; }
+.age-t13 { background-color: #FFC107; color: #000; }
+.age-t16 { background-color: #FF9800; }
+.age-t18 { background-color: #F44336; }
+
+.movie-info {
+  padding: var(--md-sys-shape-corner-large); /* 16px */
+}
+
+.movie-title {
+  color: var(--md-sys-color-on-surface);
+  margin: 0 0 4px 0;
+
+  /* M3 Title Medium Typography */
+  font-family: var(--md-sys-typescale-title-medium-font);
+  font-size: var(--md-sys-typescale-title-medium-size);
+  font-weight: var(--md-sys-typescale-title-medium-weight);
+  line-height: var(--md-sys-typescale-title-medium-line-height);
+}
+
+.movie-genre {
+  color: var(--md-sys-color-on-surface-variant);
+  margin: 0 0 8px 0;
+
+  /* M3 Body Medium Typography */
+  font-family: var(--md-sys-typescale-body-medium-font);
+  font-size: var(--md-sys-typescale-body-medium-size);
+  font-weight: var(--md-sys-typescale-body-medium-weight);
+  line-height: var(--md-sys-typescale-body-medium-line-height);
+}
+
+.movie-details {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  color: var(--md-sys-color-on-surface-variant);
+  font-family: var(--md-sys-typescale-label-medium-font);
+  font-size: var(--md-sys-typescale-label-medium-size);
+  font-weight: var(--md-sys-typescale-label-medium-weight);
+}
+
+.duration-smart-container {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.smart-match-info {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: #B388FF; /* Bright Purple/Lavender */
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.2px;
+}
+
+.smart-match-info .material-symbols-outlined {
+  font-size: 16px !important;
+  color: #B388FF;
+}
+
+.movie-duration, .movie-release {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.movie-status-tag {
+  display: inline-flex;
+  align-items: center;
+  padding: 2px 8px;
+  border-radius: 4px;
+  font-weight: 800;
+  font-size: 11px;
+  letter-spacing: 0.5px;
+  width: fit-content;
+}
+
+.movie-status-tag.coming {
+  background-color: var(--md-sys-color-primary-container);
+  color: var(--md-sys-color-primary);
+  border: 1px solid var(--md-sys-color-primary);
+}
+
+@media screen and (max-width: 480px) {
+  .movie-info {
+    padding: 12px; /* Corresponds to medium corner */
+  }
+}

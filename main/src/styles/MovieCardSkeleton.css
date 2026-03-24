@@ -1,0 +1,48 @@
+.movie-card-skeleton {
+  background: transparent;
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.poster-skeleton {
+  width: 100%;
+  aspect-ratio: 2/3;
+  background-color: rgba(228, 189, 102, 0.05); /* Very subtle gold tint */
+  border-radius: 12px;
+  animation: cinema-pulse 1.5s infinite ease-in-out;
+  border: 1px solid rgba(228, 189, 102, 0.1);
+}
+
+.info-skeleton {
+  padding: 1rem 0 0 0;
+}
+
+.title-skeleton {
+  width: 80%;
+  height: 20px;
+  background-color: rgba(228, 189, 102, 0.1);
+  border-radius: 4px;
+  margin-bottom: 0.5rem;
+  animation: cinema-pulse 1.5s infinite ease-in-out;
+}
+
+.genre-skeleton {
+  width: 50%;
+  height: 14px;
+  background-color: rgba(228, 189, 102, 0.05);
+  border-radius: 4px;
+  animation: cinema-pulse 1.5s infinite ease-in-out;
+}
+
+/* Animation for the Cinema Hub skeleton loading effect */
+@keyframes cinema-pulse {
+  0% {
+    background-color: rgba(228, 189, 102, 0.05);
+  }
+  50% {
+    background-color: rgba(228, 189, 102, 0.15); /* Pulse to a slightly brighter gold/brown */
+  }
+  100% {
+    background-color: rgba(228, 189, 102, 0.05);
+  }
+}

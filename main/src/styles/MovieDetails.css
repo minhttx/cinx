@@ -1,0 +1,241 @@
+/* Movie Comments & Ratings - CinemaHub Theme */
+
+.movie-details-container {
+  min-height: 100vh;
+  background-color: transparent;
+  padding-top: 80px; /* Offset for header */
+}
+
+.movie-details-main {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 2rem;
+}
+
+.movie-comments-section {
+  margin-top: 4rem;
+  padding-top: 3rem;
+  border-top: 1px solid rgba(228, 189, 102, 0.1);
+  display: flex;
+  flex-direction: column;
+  gap: 2.5rem;
+}
+
+.section-title-group {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 1rem;
+}
+
+.section-title-group h2 {
+  font-size: 24px;
+  font-weight: 800;
+  margin: 0;
+}
+
+.section-title-group .comment-count {
+  background: rgba(228, 189, 102, 0.1);
+  color: var(--md-sys-color-primary);
+  padding: 4px 12px;
+  border-radius: 100px;
+  font-size: 14px;
+  font-weight: 700;
+}
+
+/* Comment Form */
+.comment-form-card {
+  padding: 2.5rem;
+  background-color: var(--md-sys-color-surface-container-low);
+  border-radius: 24px;
+  border: 1px solid rgba(228, 189, 102, 0.1);
+}
+
+.form-header {
+  margin-bottom: 1.5rem;
+}
+
+.form-header h3 {
+  margin: 0 0 8px 0;
+  font-size: 18px;
+}
+
+.form-header p {
+  font-size: 13px;
+  opacity: 0.5;
+  margin: 0;
+}
+
+.rating-input-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 2rem;
+}
+
+.rating-stars {
+  display: flex;
+  gap: 4px;
+}
+
+.star-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  color: rgba(255, 255, 255, 0.1);
+  transition: transform 0.1s;
+}
+
+.star-btn:hover { transform: scale(1.2); }
+.star-btn.active { color: var(--md-sys-color-primary); }
+
+.rating-label {
+  font-size: 18px;
+  font-weight: 800;
+  color: var(--md-sys-color-primary);
+}
+
+.comment-input-area {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.comment-textarea {
+  width: 100%;
+  background: rgba(228, 189, 102, 0.05);
+  border: 1px solid rgba(228, 189, 102, 0.1);
+  border-radius: 16px;
+  padding: 1.25rem;
+  color: #ffffff;
+  font-family: inherit;
+  font-size: 15px;
+  resize: vertical;
+  min-height: 120px;
+  transition: all 0.3s;
+}
+
+.comment-textarea:focus {
+  outline: none;
+  border-color: var(--md-sys-color-primary);
+  background: rgba(228, 189, 102, 0.1);
+}
+
+.form-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.author-input-minimal {
+  background: none;
+  border: none;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  color: #ffffff;
+  padding: 8px 0;
+  font-size: 14px;
+  font-weight: 600;
+  width: 200px;
+}
+
+.author-input-minimal:focus {
+  outline: none;
+  border-color: var(--md-sys-color-primary);
+}
+
+/* Comments List */
+.comments-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.comment-item {
+  padding: 1.5rem;
+  background: rgba(255, 255, 255, 0.02);
+  border-radius: 20px;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.comment-top-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 12px;
+}
+
+.commenter-info {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.commenter-name {
+  font-weight: 800;
+  color: #ffffff;
+}
+
+.comment-date {
+  font-size: 12px;
+  opacity: 0.4;
+}
+
+.comment-rating-badge {
+  background: rgba(228, 189, 102, 0.1);
+  color: var(--md-sys-color-primary);
+  padding: 4px 10px;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 800;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.comment-content {
+  line-height: 1.6;
+  color: rgba(255, 255, 255, 0.8);
+  margin: 0;
+}
+
+.no-comments-state {
+  text-align: center;
+  padding: 4rem;
+  opacity: 0.3;
+}
+
+.no-comments-state .material-symbols-outlined {
+  font-size: 48px;
+  margin-bottom: 1rem;
+}
+
+/* Success Overlay */
+.comment-success-overlay {
+  text-align: center;
+  padding: 2rem;
+}
+
+.comment-success-overlay .material-symbols-outlined {
+  font-size: 64px;
+  color: #4CAF50;
+  margin-bottom: 1rem;
+}
+
+.comment-success-overlay h4 {
+  margin: 0 0 10px 0;
+  font-size: 20px;
+}
+
+.comment-success-overlay p {
+  opacity: 0.6;
+  font-size: 14px;
+  margin-bottom: 2rem;
+}
+
+@media (max-width: 768px) {
+  .movie-comments-section { margin-top: 2rem; padding-top: 2rem; }
+  .comment-form-card { padding: 1.5rem; }
+  .form-footer { flex-direction: column; align-items: stretch; gap: 1.5rem; }
+  .author-input-minimal { width: 100%; }
+}

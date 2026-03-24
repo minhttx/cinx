@@ -1,0 +1,115 @@
+/* Global Cinema Styles */
+body {
+  margin: 0;
+  background-color: transparent;
+  color: var(--md-sys-color-on-background);
+  font-family: var(--md-sys-font-family);
+  min-height: 100vh;
+}
+
+/* Ensure other pages have transparent backgrounds to see the global one */
+.main-layout, 
+.homepage,
+.booking-page-container,
+.my-tickets-page,
+.upcoming-page,
+.news-page,
+.user-profile-container,
+.login-page {
+  background-color: transparent !important;
+}
+
+/* Add a bit more depth to cards on image background */
+.card, .movie-card-enhanced, .ticket-stub, .news-card {
+  backdrop-filter: blur(8px);
+  background-color: rgba(45, 36, 30, 0.8) !important;
+}
+
+/* Adjust header for global background */
+.app-header::before {
+  background: rgba(30, 24, 20, 0.7) !important;
+}
+
+/* Ensure Material Symbols use the correct font family */
+.material-symbols-outlined {
+  font-family: 'Material Symbols Outlined' !important;
+  font-weight: normal;
+  font-style: normal;
+  font-size: 24px;
+  line-height: 1;
+  letter-spacing: normal;
+  text-transform: none;
+  display: inline-block;
+  white-space: nowrap;
+  word-wrap: normal;
+  direction: ltr;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+  font-feature-settings: 'liga';
+}
+
+/* Global focus override to prevent gold borders */
+*:focus {
+  outline: none !important;
+}
+
+button:focus, input:focus, a:focus {
+  outline: none !important;
+}
+
+.search-container.focused, .profile-button:focus {
+  border-color: var(--md-sys-color-outline-variant) !important;
+  box-shadow: var(--md-sys-elevation-3) !important;
+}
+
+/* Markdown Specific Styles */
+.markdown-content ul, .markdown-content ol,
+.news-body ul, .news-body ol,
+.message-bubble ul, .message-bubble ol {
+  padding-left: 1.5rem;
+  margin: 1rem 0;
+}
+
+.markdown-content li, .news-body li, .message-bubble li {
+  margin-bottom: 0.5rem;
+}
+
+.markdown-content h1, .markdown-content h2, .markdown-content h3,
+.news-body h1, .news-body h2, .news-body h3,
+.message-bubble h1, .message-bubble h2, .message-bubble h3 {
+  color: var(--md-sys-color-primary);
+  margin: 1.5rem 0 1rem 0;
+}
+
+.markdown-content p, .news-body p, .message-bubble p {
+  margin-bottom: 1rem;
+  line-height: 1.6;
+}
+
+.markdown-content strong, .news-body strong, .message-bubble strong {
+  color: var(--md-sys-color-primary);
+  font-weight: 700;
+}
+
+.markdown-content table, .news-body table, .message-bubble table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 1rem 0;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.markdown-content th, .markdown-content td,
+.news-body th, .news-body td,
+.message-bubble th, .message-bubble td {
+  padding: 12px;
+  border: 1px solid rgba(228, 189, 102, 0.1);
+  text-align: left;
+}
+
+.markdown-content th, .news-body th, .message-bubble th {
+  background: rgba(228, 189, 102, 0.1);
+  color: var(--md-sys-color-primary);
+}

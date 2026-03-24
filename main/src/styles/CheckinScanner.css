@@ -1,0 +1,255 @@
+/*
+ * CheckinScanner.css - Standalone QR Scanner App
+ */
+
+.checkin-scanner-page {
+  width: 100vw;
+  height: 100vh;
+  background-color: #1E1814;
+  color: #ffffff;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  padding: 0;
+  overflow: hidden;
+}
+
+/* Header */
+.checkin-header {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px 24px;
+  background-color: rgba(30, 24, 20, 0.95);
+  border-bottom: 1px solid rgba(228, 189, 102, 0.1);
+  z-index: 10;
+}
+
+.checkin-title-group {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.checkin-logo {
+  font-family: 'Material Symbols Outlined';
+  font-size: 32px;
+  color: var(--md-sys-color-primary);
+}
+
+.checkin-title {
+  font-size: 20px;
+  font-weight: 800;
+  margin: 0;
+}
+
+.checkin-actions a {
+  text-decoration: none;
+}
+
+/* Scanner Area */
+#qr-reader {
+  width: 100%;
+  max-width: 600px;
+  margin: 24px auto;
+  border-radius: 24px;
+  overflow: hidden;
+  border: 4px solid rgba(228, 189, 102, 0.1);
+  box-shadow: 0 16px 48px rgba(0,0,0,0.5);
+  background: black;
+}
+
+/* Start Scan Button */
+.start-scan-container {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1.5rem;
+  text-align: center;
+  padding: 2rem;
+}
+
+.start-scan-container p {
+  font-size: 14px;
+  color: rgba(255, 255, 255, 0.6);
+  max-width: 250px;
+  line-height: 1.6;
+}
+
+.start-scan-btn {
+  height: 56px !important;
+  font-size: 16px !important;
+  font-weight: 800 !important;
+  border-radius: 16px !important;
+}
+
+/* Result Display */
+.checkin-result-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0,0,0,0.7);
+  backdrop-filter: blur(10px);
+  z-index: 100;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+}
+
+.checkin-result-overlay.visible {
+  opacity: 1;
+  pointer-events: all;
+}
+
+.result-card {
+  width: 100%;
+  max-width: 400px;
+  padding: 32px;
+  border-radius: 24px;
+  text-align: center;
+  border: 1px solid;
+  transform: scale(0.9);
+  transition: transform 0.3s ease;
+}
+
+.checkin-result-overlay.visible .result-card {
+  transform: scale(1);
+}
+
+.result-icon {
+  font-size: 80px !important;
+  margin-bottom: 16px;
+}
+
+.result-message {
+  font-size: 24px;
+  font-weight: 800;
+  margin: 0 0 8px 0;
+}
+
+.result-detail {
+  font-size: 14px;
+  opacity: 0.8;
+  line-height: 1.5;
+  min-height: 40px;
+}
+
+/* Status-specific styles */
+.result-card.success {
+  background-color: rgba(76, 175, 80, 0.1);
+  border-color: rgba(76, 175, 80, 0.3);
+  color: #4CAF50;
+}
+
+.result-card.error {
+  background-color: rgba(244, 67, 54, 0.1);
+  border-color: rgba(244, 67, 54, 0.3);
+  color: #f44336;
+}
+
+.result-card.warning {
+  background-color: rgba(255, 152, 0, 0.1);
+  border-color: rgba(255, 152, 0, 0.3);
+  color: #FF9800;
+}
+
+/* --- HISTORY DRAWER (MATCHING ADMIN STYLE) --- */
+.admin-drawer {
+  position: fixed;
+  top: 0;
+  right: 0;
+  width: 50%;
+  height: 100vh;
+  background: #2D241E;
+  z-index: 2001;
+  transform: translateX(100%);
+  transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  display: flex;
+  flex-direction: column;
+  box-shadow: -10px 0 40px rgba(0,0,0,0.5);
+  border-left: 1px solid rgba(228, 189, 102, 0.1);
+}
+
+.admin-drawer.open { transform: translateX(0); }
+
+.drawer-header-main {
+  padding: 24px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.drawer-header-main h3 {
+  margin: 0;
+  color: var(--md-sys-color-primary);
+  font-size: 1.1rem;
+  font-weight: 800;
+}
+
+.drawer-body-main {
+  flex: 1;
+  padding: 20px;
+  overflow-y: auto;
+}
+
+.drawer-overlay-admin {
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(0,0,0,0.6);
+  backdrop-filter: blur(8px);
+  z-index: 2000;
+}
+
+.history-item-minimal {
+  display: flex;
+  gap: 12px;
+  padding: 12px;
+  background: rgba(255, 255, 255, 0.03);
+  border-radius: 12px;
+  margin-bottom: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.history-icon-small {
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  background: rgba(228, 189, 102, 0.1);
+  color: var(--md-sys-color-primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.history-icon-small span { font-size: 18px; }
+
+.history-info-small { flex: 1; }
+
+.history-detail-small {
+  font-size: 13px;
+  color: #ffffff;
+  line-height: 1.4;
+  margin-bottom: 2px;
+}
+
+.history-time-small {
+  font-size: 11px;
+  color: rgba(255, 255, 255, 0.4);
+}
+
+@media screen and (max-width: 768px) {
+  .admin-drawer {
+    width: 100%;
+  }
+}
