@@ -83,39 +83,39 @@ Hệ thống AI của CinX không chỉ là một chatbot thông thường mà l
 
 *   **Cơ chế Just-In-Time RAG (Retrieval-Augmented Generation):** 
         Khác với kiến trúc RAG truyền thống dựa trên các tài liệu tĩnh và cơ sở dữ liệu vector, CinX triển khai cơ chế **Just-In-Time (JIT)**. Trong ngành rạp phim, dữ liệu (ghế trống, suất chiếu) thay đổi theo từng giây, việc sử dụng vector embeddings sẽ làm dữ liệu bị lỗi thời ngay lập tức. JIT RAG giải quyết vấn đề này bằng quy trình:
-        1.  **Dữ liệu tươi (Live Data Fetching):** Ngay khi người dùng gửi tin nhắn, hàm `gatherAIContext` kích hoạt một quy trình thu thập dữ liệu song song (`Promise.all`) từ 5 API endpoints khác nhau. Điều này đảm bảo AI luôn làm việc với trạng thái thực tế nhất của rạp phim tại milli-giây đó.
-        2.  **Tối ưu hóa tài nguyên qua PostgreSQL RPC:** Thay vì tải hàng chục nghìn bản ghi ghế về Frontend gây nghẽn băng thông, hệ thống sử dụng các hàm RPC (`get_detailed_seat_stats`) để thực hiện tính toán tổng hợp (aggregation) trực tiếp phía Server. Kết quả trả về chỉ là các con số thống kê nhỏ gọn (VIP: 5, Couple: 2, Center: 1), giúp AI nhận phản hồi nhanh và chính xác vượt qua giới hạn 1000 dòng của các hệ thống BaaS thông thường.
-        3.  **Lọc dữ liệu đa tầng (Context Pruning):** Sau khi trích xuất thực thể (NLU), hệ thống không "bơm" toàn bộ dữ liệu vào Prompt (tránh lãng phí Token và gây nhiễu AI). Thay vào đó, nó thực hiện "cắt tỉa" ngữ cảnh: Chỉ những phim, những ngày và những suất chiếu khớp với yêu cầu của người dùng mới được đưa vào ngữ cảnh. Nếu dữ liệu quá ít, hệ thống sẽ tự động mở rộng sang các ngày lân cận (Soft Filtering) để AI luôn có phương án gợi ý.
-        4.  **Làm giàu ngữ cảnh (Context Enrichment):** Hệ thống không chỉ gửi dữ liệu thô. Nó "bơm" thêm các thông tin thông minh như: Hệ số giá vé cuối tuần đã được tính toán sẵn, danh sách diễn viên, mô tả phim và đặc biệt là **3 bình luận gần nhất** của khách hàng khác. Điều này giúp AI có khả năng tư vấn "như người thật", biết dùng bằng chứng xã hội (Social Proof) để thuyết phục khách hàng.
-        5.  **Cá nhân hóa sâu (User Profiling):** AI được cung cấp lịch sử đặt vé của người dùng để phân tích "Gu" phim (thể loại yêu thích). Nhờ đó, CinX có thể đưa ra các câu trả lời như: *"Dựa trên sở thích phim Hành động của bạn, mình thấy suất chiếu 19:00 hôm nay còn ghế VIP trung tâm cực đẹp nè!"*
+1.  **Dữ liệu tươi (Live Data Fetching):** Ngay khi người dùng gửi tin nhắn, hàm `gatherAIContext` kích hoạt một quy trình thu thập dữ liệu song song (`Promise.all`) từ 5 API endpoints khác nhau. Điều này đảm bảo AI luôn làm việc với trạng thái thực tế nhất của rạp phim tại milli-giây đó.
+2.  **Tối ưu hóa tài nguyên qua PostgreSQL RPC:** Thay vì tải hàng chục nghìn bản ghi ghế về Frontend gây nghẽn băng thông, hệ thống sử dụng các hàm RPC (`get_detailed_seat_stats`) để thực hiện tính toán tổng hợp (aggregation) trực tiếp phía Server. Kết quả trả về chỉ là các con số thống kê nhỏ gọn (VIP: 5, Couple: 2, Center: 1), giúp AI nhận phản hồi nhanh và chính xác vượt qua giới hạn 1000 dòng của các hệ thống BaaS thông thường.
+3.  **Lọc dữ liệu đa tầng (Context Pruning):** Sau khi trích xuất thực thể (NLU), hệ thống không "bơm" toàn bộ dữ liệu vào Prompt (tránh lãng phí Token và gây nhiễu AI). Thay vào đó, nó thực hiện "cắt tỉa" ngữ cảnh: Chỉ những phim, những ngày và những suất chiếu khớp với yêu cầu của người dùng mới được đưa vào ngữ cảnh. Nếu dữ liệu quá ít, hệ thống sẽ tự động mở rộng sang các ngày lân cận (Soft Filtering) để AI luôn có phương án gợi ý.
+4.  **Làm giàu ngữ cảnh (Context Enrichment):** Hệ thống không chỉ gửi dữ liệu thô. Nó "bơm" thêm các thông tin thông minh như: Hệ số giá vé cuối tuần đã được tính toán sẵn, danh sách diễn viên, mô tả phim và đặc biệt là **3 bình luận gần nhất** của khách hàng khác. Điều này giúp AI có khả năng tư vấn "như người thật", biết dùng bằng chứng xã hội (Social Proof) để thuyết phục khách hàng.
+5.  **Cá nhân hóa sâu (User Profiling):** AI được cung cấp lịch sử đặt vé của người dùng để phân tích "Gu" phim (thể loại yêu thích). Nhờ đó, CinX có thể đưa ra các câu trả lời như: *"Dựa trên sở thích phim Hành động của bạn, mình thấy suất chiếu 19:00 hôm nay còn ghế VIP trung tâm cực đẹp nè!"*
 *   **Bộ não xử lý (Multi-stage NLU & Orchestration):**
         CinX không gửi trực tiếp câu hỏi của người dùng tới LLM chính để tránh tình trạng AI "nói hươu nói vượn" (Hallucination). Thay vào đó, hệ thống vận hành một quy trình **Orchestration** 2 giai đoạn:
-        1.  **Giai đoạn 1: Trích xuất thực thể (Fuzzy NLU):** 
+1.  **Giai đoạn 1: Trích xuất thực thể (Fuzzy NLU):** 
             Hệ thống sử dụng một Agent chuyên biệt (thường là Llama 3.2 với Temperature = 0) để thực hiện nhiệm vụ **Entity Extraction**. Agent này có nhiệm vụ bóc tách các ý định (Intent) của người dùng thành cấu trúc JSON chuẩn hóa. Đặc biệt, hệ thống sở hữu logic **Date Normalization** mạnh mẽ:
             - Các từ ngữ mơ hồ như "mai", "mốt", "thứ 7 tới", "cuối tuần này" được hàm `calculateDatesFromText` tự động quy đổi thành danh sách các ngày chính xác định dạng `YYYY-MM-DD`.
             - Các khung giờ như "tối nay", "sáng sớm" được quy đổi thành các dải số (ví dụ: `start: 18, end: 23`).
             - **Robust JSON Parsing:** Để đối phó với việc AI đôi khi trả về mã Markdown dư thừa, hệ thống sử dụng các biểu thức chính quy (Regex) và logic "bracket matching" để trích xuất lõi JSON, đảm bảo quy trình không bị ngắt quãng bởi lỗi cú pháp.
-        2.  **Giai đoạn 2: Điều phối ngữ cảnh (Context Orchestration):** 
+2.  **Giai đoạn 2: Điều phối ngữ cảnh (Context Orchestration):** 
             Sau khi có dữ liệu NLU, bộ điều phối (Orchestrator) thực hiện "nhúng" (Injected) các tầng dữ liệu vào `SYSTEM_PROMPT` theo cấu trúc:
             - **[DỮ LIỆU HỆ THỐNG]:** Danh sách phim và suất chiếu đã được lọc qua bộ lọc NLU (chỉ giữ lại những gì khách quan tâm).
             - **[GIÁ VÉ LINH HOẠT]:** Tự động tính toán giá vé dựa trên việc phát hiện thực thể "cuối tuần" (weekendMultiplier).
             - **[HỒ SƠ KHÁCH HÀNG]:** "Bơm" thông tin về tên và gu phim của khách để AI có tông giọng xưng hô phù hợp.
             - **[CHIẾN THUẬT BÁN HÀNG]:** Các chỉ thị ngầm (Hidden Instructions) yêu cầu AI phải hối thúc khi thấy ghế sắp hết hoặc gợi ý link khi thấy suất chiếu đẹp.
-        3.  **Prompt Engineering chuyên sâu:** 
+3.  **Prompt Engineering chuyên sâu:** 
             Chúng ta sử dụng kỹ thuật **Few-shot Prompting** và **Chain-of-Thought (CoT)** ẩn để hướng dẫn AI trích xuất thực thể. AI được cung cấp các ví dụ mẫu về cách chuyển đổi ngôn ngữ đời thường sang dữ liệu máy tính, giúp độ chính xác của NLU đạt trên 95% ngay cả với các mô hình ngôn ngữ nhỏ chạy local.
 *   **Cơ chế Phản hồi & Hiển thị (Interactive Streaming UI):**
         Giao diện chatbot của CinX được thiết kế để mang lại cảm giác phản hồi tức thì và tương tác hai chiều sâu sắc:
-        1.  **Xử lý Streaming (Fetch Stream Reader):** 
+1.  **Xử lý Streaming (Fetch Stream Reader):** 
             Hệ thống không sử dụng kiểu phản hồi Request-Response truyền thống (phải đợi AI viết xong toàn bộ mới hiển thị). Thay vào đó, chúng ta triển khai `ReadableStream` thông qua giao thức Fetch. Kết quả từ Ollama được bóc tách theo từng cụm dữ liệu (chunks) và cập nhật trực tiếp vào State của React. Điều này tạo hiệu ứng chữ chạy thời gian thực, giúp giảm "độ trễ nhận thức" (Perceived Latency) và làm cho chatbot cảm giác "sống động" hơn.
-        2.  **Hệ thống Hyperlink Thông minh (Actionable Links):** 
+2.  **Hệ thống Hyperlink Thông minh (Actionable Links):** 
             Đây là điểm đột phá giúp rút ngắn quy trình trải nghiệm khách hàng (Customer Journey). Thông qua cấu hình `ReactMarkdown` tùy chỉnh và logic `urlTransform`, chúng ta đã "mở khóa" các giao thức URI không tiêu chuẩn:
             - **Giao thức `movie:ID`:** Khi AI nhắc đến tên phim, nó tự động bọc trong link `movie:UUID`. Giao diện Frontend lắng nghe và biến chúng thành các hyperlink vàng đặc trưng. Khi click, hệ thống gửi một `CustomEvent ('openMovieInfo')`, đóng chatbot và mở ngay Slide Drawer chi tiết phim mà không làm tải lại trang.
             - **Giao thức `showtime:ID:MOVIE_ID`:** Tương tự, các giờ chiếu được biến thành link hành động. Khi click, hệ thống không chỉ chuyển trang mà còn thực hiện "Auto-selection": Tự động chọn phim, tải danh sách suất chiếu, và nhảy thẳng vào bước **Chọn ghế** của suất chiếu đó. Quy trình này giúp người dùng đặt được vé chỉ sau 2 lần click từ cửa sổ chat.
-        3.  **Markdown & GFM Rendering:** 
+3.  **Markdown & GFM Rendering:** 
             Sử dụng `react-markdown` kết hợp với `remark-gfm` để hỗ trợ hiển thị các cấu trúc dữ liệu phức tạp như Bảng (Tables) và Danh sách (Lists). AI được chỉ dẫn luôn trình bày lịch chiếu dưới dạng bảng Markdown để khách hàng dễ dàng so sánh giữa các khung giờ và loại phòng.
-        4.  **Thiết kế phân tầng (Z-Index Layering):** 
+4.  **Thiết kế phân tầng (Z-Index Layering):** 
             Để đảm bảo chatbot luôn là ưu tiên tương tác số 1, cửa sổ chat được cấu hình `z-index: 3000` kết hợp với một lớp `nav-global-overlay` (`z-index: 2999`). Lớp phủ này sử dụng `backdrop-filter: blur(4px)` để làm mờ hậu cảnh, giúp người dùng tập trung hoàn toàn vào nội dung tư vấn của AI, đồng thời ngăn chặn các thao tác click nhầm vào các thành phần UI phía dưới.
-        5.  **Chỉ dẫn hành động (CTA Engineering):** 
+5.  **Chỉ dẫn hành động (CTA Engineering):** 
             AI được lập trình thông qua System Prompt để luôn kết thúc câu trả lời bằng một lời kêu gọi hành động (Call to Action) kèm theo hyperlink, ví dụ: *"Bạn có muốn đặt vé suất [19:00](showtime:...) ngay không?"*. Chiến thuật này làm tăng tỷ lệ chuyển đổi đặt vé thông qua chatbot một cách đáng kể.
 *   **Xử lý lỗi & Dự phòng (Robustness):** 
     *   **Lỗi Parsing JSON:** Sử dụng Regex để bóc tách JSON ngay cả khi AI trả về định dạng sai (Markdown-wrapped).
