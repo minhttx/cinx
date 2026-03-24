@@ -1,5 +1,5 @@
 ---
-tags: [coding, E4BD66, 14100D]
+tags: [coding]
 ---
 # BÁO CÁO ĐỒ ÁN TỐT NGHIỆP: HỆ THỐNG ĐẶT VÉ XEM PHIM THÔNG MINH CINX (AI-POWERED)
 
