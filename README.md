@@ -180,5 +180,46 @@ Hệ thống điều hướng được thiết kế tối ưu cho từng loại 
 *   **Booking Flow mượt mà:** Quy trình đặt vé được thiết kế dạng "Steppers" (Chọn phim -> Suất chiếu -> Ghế -> Thanh toán) với các hiệu ứng chuyển cảnh Slide giúp người dùng luôn biết mình đang ở đâu.
 *   **Interactive Chatbot:** Chatbot không chỉ là khung text mà còn tích hợp các Hyperlink hành động, cho phép người dùng "vừa chat vừa tương tác" với database mà không cần chuyển trang thủ công.
 ---
+## 7. KIỂM THỬ VÀ ĐÁNH GIÁ HỆ THỐNG
+
+### 7.1. Phạm vi kiểm thử
+Do giới hạn thời gian và nguồn lực đồ án cá nhân, hệ thống được kiểm thử 
+tập trung vào các luồng chức năng cốt lõi:
+
+| Module | Phương pháp | Mô tả |
+|--------|-------------|-------|
+| NLU Pipeline | Manual Testing | Kiểm tra 50+ utterance mẫu về đặt vé |
+| Streaming AI | Integration Test | Kiểm tra SSE response từ Ollama |
+| Database RPC | Unit Test (Jest) | Test hàm `get_detailed_seat_stats` |
+| Payment Flow | End-to-End | Test sandbox VNPAY (không real money) |
+| PWA Scanner | Device Testing | Test trên 2 thiết bị thật (Android/iOS) |
+
+### 7.2. Kết quả kiểm thử NLU (Entity Extraction)
+
+Bộ test gồm 50 câu hỏi đa dạng về đặt vé, phân loại theo độ phức tạp:
+
+| Loại utterance | Số lượng | Accuracy |
+|----------------|----------|----------|
+| Đơn giản (tên phim rõ ràng) | 15 | 93% (14/15) |
+| Ngày giờ mơ hồ ("mai", "tối nay") | 20 | 85% (17/20) |
+| Phức tạp (kết hợp nhiều ràng buộc) | 15 | 73% (11/15) |
+
+**Lỗi phổ biến:** 
+- "Mốt" đôi khi bị nhận diện sai thành ngày hiện tại (2/20 cases)
+- Giờ "chiều tà" chưa có trong normalization mapping
+
+### 7.3. Hạn chế & Hướng phát triển
+
+| Hạn chế | Nguyên nhân | Giải pháp đề xuất |
+|---------|-------------|-------------------|
+| Chưa có automated test suite | Thời gian triển khai feature ưu tiên | Cypress cho E2E, Jest cho unit test |
+| Load testing chưa thực hiện | Giới hạn infrastructure cá nhân | Sử dụng k6 hoặc Locust để test concurrent users |
+| AI evaluation metrics thủ công | Chưa tích hợp LLM-as-a-Judge | Triển khai Ragas hoặc custom scoring |
+
+### 7.4. Kiểm thử bảo mật cơ bản
+- ✅ Input sanitization cho SQL injection (Supabase RLS)
+- ✅ Rate limiting qua Nginx (basic config)
+- ⚠️ XSS: Chưa audit toàn diện ReactMarkdown rendering
+---
 **Ngày hoàn thành báo cáo:** 20/03/2026
 **Người thực hiện:** [Minh]
