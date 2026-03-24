@@ -130,6 +130,12 @@ CinX tích hợp AI sâu vào quy trình vận hành để biến Admin Panel th
         - **Tiêu đề (Title):** Thu hút, chuẩn SEO.
         - **Mô tả ngắn (Description):** Mang tính "giật gân" (FOMO) để kích thích người dùng bấm vào xem.
         - **Nội dung chính:** Được cấu trúc chuyên nghiệp bằng Markdown với các thẻ H1, H2, Bold linh hoạt.
+*   **Tự động hóa thông tin phim (TMDB API Integration):** 
+    Để tối ưu hóa quy trình nhập liệu Phim mới, hệ thống tích hợp API từ **The Movie Database (TMDB)**. Admin chỉ cần nhập tên phim và nhấn "Autofill", hệ thống sẽ tự động tìm kiếm và điền đầy đủ các trường thông tin: 
+    - Thông tin định danh: Tên phim, Thể loại, Phân loại độ tuổi.
+    - Dữ liệu kỹ thuật: Thời lượng, Ngày khởi chiếu, Điểm số đánh giá.
+    - Nội dung sáng tạo: Tóm tắt nội dung (Synopsis), Danh sách diễn viên nổi tiếng.
+    - Tài nguyên đa phương tiện: Tự động lấy URL Poster chất lượng cao và URL YouTube Trailer chính thức.
 *   **Quản lý Prompt Hệ thống (Dynamic Agent Configuration):** 
     Đây là tính năng cho phép Admin thay đổi "linh hồn" của chatbot mà không cần lập trình viên can thiệp:
     - **Live Prompt Editor:** Giao diện cho phép Admin chỉnh sửa trực tiếp `SYSTEM_PROMPT` trong cơ sở dữ liệu Supabase. 
