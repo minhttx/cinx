@@ -6,12 +6,6 @@
 
 ![Booking](booking.png)
 
-![News](news.png)
-
-![Chatbot](chatbot.png)
-
-![Admin](admin.png)
-
 ## 1. TỔNG QUAN CÔNG NGHỆ (TECH STACK)
 
 Dự án được xây dựng dựa trên kiến trúc hiện đại, tối ưu hóa cho trải nghiệm người dùng và khả năng mở rộng.
@@ -70,7 +64,15 @@ CinX xây dựng một hạ tầng AI lai (Hybrid AI Architecture), kết hợp 
 *   **Dashboard Analytics:** Biểu đồ doanh thu, thống kê lượt đặt vé theo giờ và theo phim.
 *   **Quản lý Suất chiếu tự động:** Thuật toán tự động sắp xếp lịch chiếu cả tuần dựa trên loại phòng (IMAX, 4DX, 2D) và độ "Hot" của phim.
 *   **Kiểm soát nội dung:** Quản lý phim, tin tức, khuyến mãi và phê duyệt bình luận khách hàng.
-*   **Hệ thống Check-in:** Quét mã vé để xác nhận vào rạp.
+*   **Hệ thống Check-in Scanner (PWA Optimized):**
+        Đây là ứng dụng chuyên dụng dành cho nhân viên rạp (Mod/Admin) để kiểm soát vé vào cửa một cách nhanh chóng và chính xác:
+1.  **Công nghệ Quét mã QR:** Sử dụng thư viện `html5-qrcode` kết hợp với kiến trúc **Progressive Web App (PWA)**. Điều này cho phép nhân viên sử dụng trực tiếp camera trên điện thoại cá nhân (Android/iOS) để quét mã mà không cần thiết bị chuyên dụng đắt tiền.
+2.  **Cơ chế Xác thực đa tầng (Triple Security Check):**
+- **Trạng thái Thanh toán:** Hệ thống chỉ chấp nhận các mã vé có trạng thái `confirmed`.
+- **Kiểm tra Check-in:** Ngăn chặn tuyệt đối việc sử dụng một mã vé hai lần (Double-spending). Nếu vé đã quét, hệ thống sẽ cảnh báo đỏ kèm thời gian check-in trước đó.
+- **Thời hạn suất chiếu:** AI-powered logic tự động tính toán thời gian kết thúc của phim (Dựa trên `start_time` + `duration`). Nếu suất chiếu đã kết thúc quá lâu, vé sẽ bị coi là không hợp lệ.
+3.  **Lịch sử Quét (Staff History Logs):** Mỗi hành động quét đều được ghi lại (Log) kèm theo định danh của nhân viên thực hiện. Điều này giúp Admin dễ dàng đối soát doanh thu và kiểm soát chất lượng làm việc của nhân sự.
+4.  **Giao diện tối ưu di động:** Thiết kế dạng Card-overlay với các icon chỉ báo trạng thái (Thành công - Xanh, Lỗi - Đỏ, Cảnh báo - Vàng), giúp nhân viên nhận biết kết quả ngay lập tức mà không cần đọc văn bản chi tiết trong điều kiện ánh sáng rạp phim thường khá tối.
 
 ---
 
@@ -80,6 +82,8 @@ CinX xây dựng một hạ tầng AI lai (Hybrid AI Architecture), kết hợp 
 
 ### 3.1. Trợ lý ảo CinX (Chatbot)
 Hệ thống AI của CinX không chỉ là một chatbot thông thường mà là một **Unified AI Orchestrator** được thiết kế để thay thế hoàn toàn các thao tác tìm kiếm và lọc dữ liệu thủ công.
+
+![Chatbot](chatbot.png)
 
 *   **Cơ chế Just-In-Time RAG (Retrieval-Augmented Generation):** 
         Khác với kiến trúc RAG truyền thống dựa trên các tài liệu tĩnh và cơ sở dữ liệu vector, CinX triển khai cơ chế **Just-In-Time (JIT)**. Trong ngành rạp phim, dữ liệu (ghế trống, suất chiếu) thay đổi theo từng giây, việc sử dụng vector embeddings sẽ làm dữ liệu bị lỗi thời ngay lập tức. JIT RAG giải quyết vấn đề này bằng quy trình:
@@ -125,6 +129,10 @@ Hệ thống AI của CinX không chỉ là một chatbot thông thường mà l
 
 ### 3.2. AI trong Quản trị (Admin Intelligence Tools)
 CinX tích hợp AI sâu vào quy trình vận hành để biến Admin Panel thành một trung tâm điều khiển thông minh, giúp giảm tải 90% công việc sáng tạo nội dung thủ công.
+
+![Admin](admin.png)
+
+![News](news.png)
 
 *   **Hệ thống AI Writing (Sáng tạo nội dung tự động):** 
     Admin có thể tạo ra các bài viết tin tức hoặc chiến dịch khuyến mãi chất lượng cao chỉ trong vài giây thông qua 2 cơ chế:
