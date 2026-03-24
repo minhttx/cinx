@@ -157,6 +157,7 @@ Tích hợp mô hình thanh toán an toàn qua cổng VNPAY Sandbox:
 *   **Vượt giới hạn 1000 dòng:** Sử dụng PostgreSQL RPC (`get_detailed_seat_stats`) để tính toán ghế trống cho hàng trăm suất chiếu cùng lúc, đảm bảo dữ liệu AI tư vấn luôn chính xác 100% mà không bị cắt cụt dữ liệu.
 *   **Xử lý Streaming:** Phản hồi của AI được gửi về dưới dạng stream (từng chữ), tạo cảm giác tương tác tức thì như ChatGPT.
 *   **Bảo mật:** Quản lý `z-index` phân tầng và lớp mờ (overlay) để đảm bảo chatbot luôn nằm trên cùng nhưng không gây gián đoạn trải nghiệm điều hướng.
+---
 ## 6. PHÂN TÍCH THIẾT KẾ GIAO DIỆN (UI/UX DESIGN)
 CinX không chỉ tập trung vào công nghệ mà còn chú trọng vào ngôn ngữ thiết kế để tạo ra một không gian điện ảnh số đẳng cấp và sang trọng.
 ### 6.1. Ngôn ngữ thiết kế: Material Design 3 (M3)
