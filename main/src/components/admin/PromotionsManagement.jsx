@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { contentAPI, logAPI } from '../../services/api';
 import { generatePromotionFromPrompt } from '../../services/ai';
 import GenericSkeleton from '../GenericSkeleton';
+import ConfirmModal from '../ConfirmModal';
 import '../../styles/admin/PromotionsManagement.css';
 import '../../styles/components/Card.css';
 
@@ -12,6 +13,11 @@ const PromotionsManagement = () => {
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const [editingPromotion, setEditingPromotion] = useState(null);
   const [submitting, setSubmitting] = useState(false);
+  
+  // Confirm Modal state
+  const [confirmModal, setConfirmModal] = useState({ 
+    isOpen: false, title: '', message: '', action: null 
+  });
 
   const [formData, setFormData] = useState({
     title: '',
@@ -121,50 +127,47 @@ const PromotionsManagement = () => {
     setIsDrawerOpen(true);
   };
 
-const handleAIWriting = async () => {
-  if (!sourceUrl.trim()) {
-    alert('Vui lòng nhập mô tả chủ đề khuyến mãi!');
-    return;
-  }
-
-  try {
-    setIsAIWriting(true);
-    setError('');
-
-    // Luôn dùng prompt mode cho promotions
-    const result = await generatePromotionFromPrompt(sourceUrl.trim());
-
-    if (result.error) {
-      setError(result.error);
+  const handleAIWriting = async () => {
+    if (!sourceUrl.trim()) {
+      alert('Vui lòng nhập mô tả chủ đề khuyến mãi!');
       return;
     }
 
-    // Fill form
-    setFormData(prev => ({
-      ...prev,
-      title: result.title || '',
-      description: result.description || ''
-    }));
+    try {
+      setIsAIWriting(true);
+      setError('');
 
-  } catch (err) {
-    console.error('AI Writing error:', err);
-    setError('AI Writing gặp lỗi: ' + err.message);
-  } finally {
-    setIsAIWriting(false);
-  }
-};
+      const result = await generatePromotionFromPrompt(sourceUrl.trim());
+
+      if (result.error) {
+        setError(result.error);
+        return;
+      }
+
+      setFormData(prev => ({
+        ...prev,
+        title: result.title || '',
+        description: result.description || ''
+      }));
+
+    } catch (err) {
+      console.error('AI Writing error:', err);
+      setError('AI Writing gặp lỗi: ' + err.message);
+    } finally {
+      setIsAIWriting(false);
+    }
+  };
 
   const handleDelete = async (id) => {
     const item = promotions.find(p => p.id === id);
-    if (window.confirm('Bạn có chắc chắn muốn xóa khuyến mãi này?')) {
-      try {
-        const { error } = await contentAPI.deletePromotion(id);
-        if (error) throw error;
-        await logAPI.logAdminAction('Xóa khuyến mãi', item?.title || 'Unknown', 'promotion');
-        loadPromotions();
-      } catch (err) {
-        setError('Lỗi xóa khuyến mãi: ' + err.message);
-      }
+    try {
+      const { error } = await contentAPI.deletePromotion(id);
+      if (error) throw error;
+      await logAPI.logAdminAction('Xóa khuyến mãi', item?.title || 'Unknown', 'promotion');
+      loadPromotions();
+      setConfirmModal(prev => ({ ...prev, isOpen: false }));
+    } catch (err) {
+      setError('Lỗi xóa khuyến mãi: ' + err.message);
     }
   };
 
@@ -225,8 +228,17 @@ const handleAIWriting = async () => {
                 </div>
               </div>
               <div className="promotion-actions">
-                <button className="m3-btn-sm m3-btn-outlined" onClick={() => handleEdit(promotion)}>Sửa</button>
-                <button className="m3-btn-sm m3-btn-text" style={{ color: '#ff4444' }} onClick={() => handleDelete(promotion.id)}>Xóa</button>
+                <button className="m3-btn m3-btn-filled m3-btn-sm" onClick={() => handleEdit(promotion)}>
+                  <span className="material-symbols-outlined">edit</span> Sửa
+                </button>
+                <button className="m3-btn m3-btn-outlined m3-btn-sm danger-btn" onClick={() => setConfirmModal({
+                  isOpen: true,
+                  title: 'Xóa khuyến mãi?',
+                  message: `Bạn có chắc muốn xóa chương trình "${promotion.title}"?`,
+                  action: () => handleDelete(promotion.id)
+                })}>
+                  <span className="material-symbols-outlined">delete</span> Xóa
+                </button>
               </div>
             </div>
           ))
@@ -242,13 +254,13 @@ const handleAIWriting = async () => {
         <div className="drawer-body-main">
           <form onSubmit={handleSubmit} className="movie-form-vertical">
             <div className="m3-textfield" style={{ display: 'flex', gap: '12px', alignItems: 'center' }}>
-<input 
-  type="text" 
-  value={sourceUrl} 
-  onChange={(e) => setSourceUrl(e.target.value)} 
-  placeholder="Nhập mô tả khuyến mãi (vd: 'giảm 20% vé cuối tuần cho sinh viên')..." 
-  style={{ flex: 1 }}
-/>
+              <input 
+                type="text" 
+                value={sourceUrl} 
+                onChange={(e) => setSourceUrl(e.target.value)} 
+                placeholder="Nhập mô tả khuyến mãi (vd: 'giảm 20% vé cuối tuần cho sinh viên')..." 
+                style={{ flex: 1 }}
+              />
               <button 
                 type="button" 
                 className="m3-btn m3-btn-tonal m3-btn-sm" 
@@ -297,6 +309,14 @@ const handleAIWriting = async () => {
         </div>
       </div>
       {isDrawerOpen && <div className="drawer-overlay-admin" onClick={() => setIsDrawerOpen(false)} />}
+
+      <ConfirmModal 
+        isOpen={confirmModal.isOpen}
+        title={confirmModal.title}
+        message={confirmModal.message}
+        onConfirm={confirmModal.action}
+        onCancel={() => setConfirmModal({ ...confirmModal, isOpen: false })}
+      />
     </div>
   );
 };

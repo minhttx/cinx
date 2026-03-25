@@ -890,6 +890,80 @@ JSON:`;
   }
 }
 
+const sentimentCache = new Map();
+const MAX_CACHE_SIZE = 100;
+
+/**
+ * Phân tích cảm xúc bình luận (Sentiment Analysis)
+ */
+export async function analyzeCommentSentiment(commentText, signal = null) {
+    // Check cache
+    if (sentimentCache.has(commentText)) {
+        return sentimentCache.get(commentText);
+    }
+
+    const { data: config } = await configurationAPI.getAIConfig();
+    const activeProviderKey = config?.active_provider || 'llama';
+    const modelName = OLLAMA_MODELS[activeProviderKey] || OLLAMA_MODELS.llama;
+
+    const prompt = `Bạn là chuyên gia kiểm duyệt nội dung của rạp phim CinX.
+Bối cảnh: Đánh giá về TRẢI NGHIỆM RẠP PHIM (phim, ghế, âm thanh, nhân viên, đồ ăn...)
+
+Nhiệm vụ: Phân tích cảm xúc bình luận sau và trả về JSON.
+
+Bình luận: "${sanitizeForPrompt(commentText)}"
+
+Yêu cầu JSON:
+{
+  "score": number (0-1, 1=cực kỳ tích cực, 0=cực kỳ tiêu cực),
+  "label": "Positive" | "Negative" | "Neutral",
+  "reason": "Lý do ngắn gọn TỐI ĐA 10 TỪ tiếng Việt"
+}
+
+Chỉ trả JSON, không giải thích.`;
+
+    try {
+        const content = await callOllama(modelName, [{ role: 'user', content: prompt }], { 
+            format: 'json', 
+            temperature: 0.1,
+            signal 
+        });
+        
+        let result;
+        try {
+            result = JSON.parse(content);
+        } catch (parseError) {
+            const jsonMatch = content.match(/\{[\s\S]*\}/);
+            result = jsonMatch ? JSON.parse(jsonMatch[0]) : { 
+                score: 0.5, 
+                label: 'Neutral', 
+                reason: 'Không thể phân tích' 
+            };
+        }
+
+        // Validate result
+        if (!['Positive', 'Negative', 'Neutral'].includes(result.label)) {
+            result.label = 'Neutral';
+        }
+        if (typeof result.score !== 'number' || result.score < 0 || result.score > 1) {
+            result.score = 0.5;
+        }
+
+        // Cache result
+        if (sentimentCache.size >= MAX_CACHE_SIZE) {
+            const firstKey = sentimentCache.keys().next().value;
+            sentimentCache.delete(firstKey);
+        }
+        sentimentCache.set(commentText, result);
+
+        return result;
+        
+    } catch (error) {
+        console.error('Sentiment Analysis Error:', error);
+        return { score: 0.5, label: 'Neutral', reason: 'Lỗi kết nối AI' };
+    }
+}
+
 export async function checkAIProvider() {
     return await configurationAPI.getAIConfig();
 }

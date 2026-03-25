@@ -434,9 +434,13 @@ const MovieManagement = () => {
               <h4 className="movie-title">{movie.title}</h4>
               <p className="movie-meta">{movie.genre} • {movie.duration}ph</p>
               <div className="card-actions">
-                <button className="m3-btn-sm m3-btn-tonal" onClick={() => handleOpenEdit(movie)}>Sửa</button>
+                <button className="m3-btn m3-btn-filled m3-btn-sm" onClick={() => handleOpenEdit(movie)}>
+                  <span className="material-symbols-outlined">edit</span> Sửa
+                </button>
                 {movie.status !== 'ended' && (
-                  <button className="m3-btn m3-btn-text" style={{color: '#ff4444'}} onClick={() => askConfirm('Ngừng chiếu phim?', `Bạn có chắc muốn ngừng chiếu "${movie.title}"? Phim sẽ được chuyển sang danh mục Ngừng chiếu để lưu trữ dữ liệu.`, () => executeEndMovie(movie.id))}>Ngừng chiếu</button>
+                  <button className="m3-btn m3-btn-outlined m3-btn-sm danger-btn" onClick={() => askConfirm('Ngừng chiếu phim?', `Bạn có chắc muốn ngừng chiếu "${movie.title}"? Phim sẽ được chuyển sang danh mục Ngừng chiếu để lưu trữ dữ liệu.`, () => executeEndMovie(movie.id))}>
+                    <span className="material-symbols-outlined">block</span> Ngừng chiếu
+                  </button>
                 )}
               </div>
             </div>

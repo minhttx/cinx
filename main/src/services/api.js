@@ -401,6 +401,13 @@ export const commentAPI = {
   },
   async updateCommentStatus(id, status) {
     return await supabase.from(TABLES.COMMENTS).update({ status }).eq('id', id);
+  },
+  async saveCommentSentiment(id, sentimentData) {
+    return await supabase.from(TABLES.COMMENTS).update({ 
+      ai_sentiment_score: sentimentData.score,
+      ai_sentiment_label: sentimentData.label,
+      ai_sentiment_reason: sentimentData.reason
+    }).eq('id', id);
   }
 };
 

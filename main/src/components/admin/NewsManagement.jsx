@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { contentAPI, logAPI } from '../../services/api';
-// Dòng 3 trong NewsManagement.jsx
 import { generateNewsFromURL, generateNewsFromText } from '../../services/ai';
 import GenericSkeleton from '../GenericSkeleton';
+import ConfirmModal from '../ConfirmModal';
 import '../../styles/admin/NewsManagement.css';
 import '../../styles/components/Card.css';
 
@@ -13,6 +13,11 @@ const NewsManagement = () => {
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const [editingNews, setEditingNews] = useState(null);
   const [submitting, setSubmitting] = useState(false);
+  
+  // Confirm Modal state
+  const [confirmModal, setConfirmModal] = useState({ 
+    isOpen: false, title: '', message: '', action: null 
+  });
 
   const [formData, setFormData] = useState({
     title: '',
@@ -111,66 +116,56 @@ const NewsManagement = () => {
     setIsDrawerOpen(true);
   };
 
-// NewsManagement.jsx - handleAIWriting
-
-const handleAIWriting = async () => {
-  if (!sourceUrl.trim()) {
-    alert('Vui lòng nhập URL hoặc mô tả chủ đề tin tức!');
-    return;
-  }
-
-  try {
-    setIsAIWriting(true);
-    setError('');
-
-    let result;
-    const input = sourceUrl.trim();
-
-    // Detect mode: URL vs Prompt
-    const isUrl = input.startsWith('http://') || input.startsWith('https://');
-    
-    if (isUrl) {
-      console.log('[DEBUG] URL mode detected:', input);
-      result = await generateNewsFromURL(input);
-    } else {
-      console.log('[DEBUG] Prompt mode detected:', input);
-      result = await generateNewsFromText(input);
-    }
-
-    console.log('[DEBUG] AI result:', result);
-
-    if (result.error) {
-      setError(result.error);
+  const handleAIWriting = async () => {
+    if (!sourceUrl.trim()) {
+      alert('Vui lòng nhập URL hoặc mô tả chủ đề tin tức!');
       return;
     }
 
-    // Fill form
-    setFormData(prev => ({
-      ...prev,
-      title: result.title || '',
-      summary: result.summary || '',
-      content: result.content || ''
-    }));
+    try {
+      setIsAIWriting(true);
+      setError('');
 
-  } catch (err) {
-    console.error('AI Writing error:', err);
-    setError('AI Writing gặp lỗi: ' + err.message);
-  } finally {
-    setIsAIWriting(false);
-  }
-};
+      let result;
+      const input = sourceUrl.trim();
+      const isUrl = input.startsWith('http://') || input.startsWith('https://');
+      
+      if (isUrl) {
+        result = await generateNewsFromURL(input);
+      } else {
+        result = await generateNewsFromText(input);
+      }
+
+      if (result.error) {
+        setError(result.error);
+        return;
+      }
+
+      setFormData(prev => ({
+        ...prev,
+        title: result.title || '',
+        summary: result.summary || '',
+        content: result.content || ''
+      }));
+
+    } catch (err) {
+      console.error('AI Writing error:', err);
+      setError('AI Writing gặp lỗi: ' + err.message);
+    } finally {
+      setIsAIWriting(false);
+    }
+  };
 
   const handleDelete = async (id) => {
     const item = news.find(n => n.id === id);
-    if (window.confirm('Bạn có chắc chắn muốn xóa tin tức này?')) {
-      try {
-        const { error } = await contentAPI.deleteNews(id);
-        if (error) throw error;
-        await logAPI.logAdminAction('Xóa tin tức', item?.title || 'Unknown', 'news');
-        loadNews();
-      } catch (err) {
-        setError('Lỗi xóa tin tức: ' + err.message);
-      }
+    try {
+      const { error } = await contentAPI.deleteNews(id);
+      if (error) throw error;
+      await logAPI.logAdminAction('Xóa tin tức', item?.title || 'Unknown', 'news');
+      loadNews();
+      setConfirmModal(prev => ({ ...prev, isOpen: false }));
+    } catch (err) {
+      setError('Lỗi xóa tin tức: ' + err.message);
     }
   };
 
@@ -219,8 +214,17 @@ const handleAIWriting = async () => {
                 </div>
               </div>
               <div className="news-actions">
-                <button className="m3-btn-sm m3-btn-outlined" onClick={() => handleEdit(newsItem)}>Sửa</button>
-                <button className="m3-btn-sm m3-btn-text" style={{ color: '#ff4444' }} onClick={() => handleDelete(newsItem.id)}>Xóa</button>
+                <button className="m3-btn m3-btn-filled m3-btn-sm" onClick={() => handleEdit(newsItem)}>
+                  <span className="material-symbols-outlined">edit</span> Sửa
+                </button>
+                <button className="m3-btn m3-btn-outlined m3-btn-sm danger-btn" onClick={() => setConfirmModal({
+                  isOpen: true,
+                  title: 'Xóa tin tức?',
+                  message: `Bạn có chắc muốn xóa bài viết "${newsItem.title}"?`,
+                  action: () => handleDelete(newsItem.id)
+                })}>
+                  <span className="material-symbols-outlined">delete</span> Xóa
+                </button>
               </div>
             </div>
           ))
@@ -286,6 +290,14 @@ const handleAIWriting = async () => {
         </div>
       </div>
       {isDrawerOpen && <div className="drawer-overlay-admin" onClick={() => setIsDrawerOpen(false)} />}
+
+      <ConfirmModal 
+        isOpen={confirmModal.isOpen}
+        title={confirmModal.title}
+        message={confirmModal.message}
+        onConfirm={confirmModal.action}
+        onCancel={() => setConfirmModal({ ...confirmModal, isOpen: false })}
+      />
     </div>
   );
 };
