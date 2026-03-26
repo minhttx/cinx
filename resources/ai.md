@@ -41,4 +41,4 @@ Cập nhật thẻ **"Trí tuệ nhân tạo (CinX)"** trong module **Tổng qua
 ---
 *Chờ cung cấp API Key và chỉ thị triển khai...*
 
-Gemini API Key: AIzaSyBAOPwm-bsczfnC5tNvYo_5c2w-1TO2uCg
+Gemini API Key: 
