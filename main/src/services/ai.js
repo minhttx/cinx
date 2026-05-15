@@ -7,7 +7,7 @@ import { movieAPI, bookingAPI, showtimeAPI, configurationAPI, aiChatAPI, comment
 const OLLAMA_ENDPOINT = "/ai-api/chat";
 const OLLAMA_MODELS = {
     llama: 'llama3.2:3b',
-    gemini: 'gemini-3-flash-preview:cloud'
+    gemini: 'gemma4:31b-cloud'
 };
 
 const DEFAULT_PRICING = {
@@ -422,10 +422,14 @@ export async function getCinXResponse(userMessage, context = {}, onChunk = null,
                 
                 const renderSlot = (st) => {
                     const m = movies.find(mov => mov.id === st.movie_id);
-                    const s = seatAvailability[st.id] || { total: 90, vip: 40, couple: 10, centerVip: 20 };
+                    const s = seatAvailability[st.id];
                     
-                    // Xử lý fallback nếu dữ liệu trống
-                    const actualTotal = s.total || 90;
+                    // Xử lý logic hiển thị ghế thực tế, không dùng fallback 90
+                    if (!s) {
+                        return `    • [${m?.title}](movie:${m?.id}): [${st.show_time.substring(0,5)}](showtime:${st.id}:${m?.id}) (Liên hệ rạp để biết số ghế trống)\n`;
+                    }
+
+                    const actualTotal = s.total || 0;
                     const actualVip = s.vip || 0;
                     const actualCouple = s.couple || 0;
                     const actualCenter = s.centerVip || 0;
@@ -433,7 +437,8 @@ export async function getCinXResponse(userMessage, context = {}, onChunk = null,
                     let info = `    • [${m?.title}](movie:${m?.id}): [${st.show_time.substring(0,5)}](showtime:${st.id}:${m?.id}) (Trống: ${actualTotal}`;
                     if (actualCenter > 0) info += `, CÓ ${actualCenter} GHẾ VIP TRUNG TÂM! 👑`;
                     if (actualCouple > 0) info += `, CÓ ${actualCouple} GHẾ COUPLE LÃNG MẠN! 💖`;
-                    if (actualTotal < 10) info += ` - CHỈ CÒN VÀI GHẾ! 😱`;
+                    if (actualTotal > 0 && actualTotal < 10) info += ` - CHỈ CÒN VÀI GHẾ! 😱`;
+                    if (actualTotal === 0) info += ` - HẾT VÉ! 🚫`;
                     info += `)\n`;
                     return info;
                 };

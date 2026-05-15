@@ -594,6 +594,137 @@
   }
 }
 
+/* --- ANALYTICS HEATMAP --- */
+.analytics-heatmap-container {
+  margin-top: 32px;
+  padding-top: 24px;
+  border-top: 1px solid rgba(228, 189, 102, 0.1);
+}
+
+.heatmap-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.heatmap-title-group {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.heatmap-title-group h4 {
+  margin: 0;
+  font-size: 14px;
+  font-weight: 700;
+  color: rgba(255, 255, 255, 0.6);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.heatmap-legend {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 11px;
+  color: rgba(255, 255, 255, 0.4);
+}
+
+.legend-cell, .heatmap-cell {
+  width: 14px;
+  height: 14px;
+  border-radius: 3px;
+}
+
+.legend-cell.level-0, .heatmap-cell.level-0 { background: rgba(255, 255, 255, 0.05); }
+.legend-cell.level-1, .heatmap-cell.level-1 { background: rgba(228, 189, 102, 0.2); }
+.legend-cell.level-2, .heatmap-cell.level-2 { background: rgba(228, 189, 102, 0.4); }
+.legend-cell.level-3, .heatmap-cell.level-3 { background: rgba(228, 189, 102, 0.7); }
+.legend-cell.level-4, .heatmap-cell.level-4 { background: var(--md-sys-color-primary); }
+
+.heatmap-scroll-wrapper {
+  overflow-x: auto;
+  padding: 10px 0;
+  width: 100%;
+}
+
+.heatmap-grid-main {
+  display: flex;
+  gap: 8px;
+  width: 100%;
+  min-width: 800px; /* Đảm bảo không bị quá nhỏ trên màn hình bé */
+  justify-content: space-between;
+}
+
+.heatmap-hours-labels {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-right: 16px;
+  flex-shrink: 0;
+}
+
+.label-spacer { height: 24px; }
+
+.hour-label {
+  height: 24px; /* Tăng chiều cao để khớp với cell lớn hơn */
+  font-size: 11px;
+  color: rgba(255, 255, 255, 0.4);
+  display: flex;
+  align-items: center;
+  font-weight: 700;
+}
+
+.heatmap-day-column {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  align-items: center;
+  flex: 1; /* Quan trọng: để các cột dãn đều chiếm hết chiều rộng */
+}
+
+.day-label {
+  height: 24px;
+  font-size: 12px;
+  color: var(--md-sys-color-primary);
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-bottom: 4px;
+}
+
+.heatmap-cell {
+  width: 100%; /* Cell dãn theo chiều rộng cột */
+  height: 24px; /* Tăng chiều cao cell */
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  border: 1px solid rgba(255, 255, 255, 0.02);
+}
+
+.heatmap-cell:hover {
+  transform: scale(1.05, 1.1);
+  z-index: 2;
+  box-shadow: 0 4px 12px rgba(228, 189, 102, 0.3);
+  border-color: rgba(228, 189, 102, 0.5);
+}
+
+.cell-value {
+  display: none;
+  font-size: 10px;
+  font-weight: 900;
+  color: #1E1814;
+}
+
+.heatmap-cell:hover .cell-value {
+  display: block;
+}
+
 /* Responsive Design */
 @media (max-width: 1024px) {
   .movies-card, .recent-bookings-card { grid-column: span 1; }

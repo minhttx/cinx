@@ -133,7 +133,12 @@ const BookingCallback = () => {
             </div>
         </div>
         <div className="drawer-body">
-          {status === 'success' ? (
+          {status === 'processing' ? (
+            <div className="loading-message-panel">
+              <div className="spinner-small"></div>
+              <p>Đang kiểm tra kết quả giao dịch...</p>
+            </div>
+          ) : status === 'success' ? (
             <div className="success-message-panel">
               <span className="material-symbols-outlined success-check-icon">verified</span>
               <h2 className="drawer-title">Thanh toán thành công!</h2>
@@ -160,7 +165,7 @@ const BookingCallback = () => {
           ) : (
             <div className="error-message-panel">
                <h2 className="drawer-title">Thông tin thanh toán</h2>
-               <p>Có lỗi xảy ra trong quá trình xử lý giao dịch của bạn.</p>
+               <p>{errorMessage || 'Có lỗi xảy ra trong quá trình xử lý giao dịch của bạn.'}</p>
                <div className="drawer-bill-section">
                 <button className="m3-btn m3-btn-filled confirm-booking-btn" onClick={() => navigate('/booking')}>Thử lại</button>
               </div>

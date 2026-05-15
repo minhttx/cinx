@@ -1,13 +1,21 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
+import { useContent } from '../contexts/ContentContext';
 import '../styles/BookingSuccess.css';
 
 const BookingSuccess = () => {
   const location = useLocation();
   const navigate = useNavigate();
+  const { refreshContent } = useContent();
   
   // Get booking data from navigation state
   const { bookingId, totalAmount } = location.state || {};
+
+  useEffect(() => {
+    if (bookingId) {
+      refreshContent();
+    }
+  }, [bookingId, refreshContent]);
   
   const handleGoHome = () => {
     navigate('/');

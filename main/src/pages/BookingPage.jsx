@@ -327,18 +327,34 @@ const BookingPage = ({ gheDangChon, tongTien, isSubmitting, dispatch }) => {
     }
   };
 
-  const handleVnpayRedirect = async () => {
+  const [showVnpayModal, setShowVnpayModal] = useState(false);
+
+  const handleVnpayRedirect = () => {
+    setShowVnpayModal(true);
+  };
+
+  const handleConfirmVnpay = async () => {
     try {
+      setShowVnpayModal(false);
+      // IMPORTANT: Set progress to false before leaving to avoid Browser "Leave Site" popup
+      dispatch({ type: 'SET_BOOKING_PROGRESS', inProgress: false, bookingId: null });
+
       const url = await createVnpayUrl({
         orderId: bookingId, amount: tongTien,
         orderInfo: `Thanh toan ve phim ${selectedMovie.title}`,
         ipAddr: '127.0.0.1'
       });
       window.location.href = url;
-    } catch (err) { alert('Lỗi tạo liên kết thanh toán: ' + err.message); }
+    } catch (err) { 
+      alert('Lỗi tạo liên kết thanh toán: ' + err.message); 
+      // Re-enable if error
+      dispatch({ type: 'SET_BOOKING_PROGRESS', inProgress: true, bookingId: bookingId });
+    }
   };
 
-  const handleExpire = () => setIsExpired(true);
+  const handleExpire = () => {
+    setIsExpired(true);
+  };
 
   const handleRetryAfterExpire = async () => {
     if (bookingId) await bookingAPI.deleteBooking(bookingId);
@@ -598,6 +614,16 @@ const BookingPage = ({ gheDangChon, tongTien, isSubmitting, dispatch }) => {
         isOpen={isInfoSidebarOpen}
         onClose={() => setIsInfoSidebarOpen(false)}
         onBookTicket={handleProceedFromSidebar}
+      />
+
+      <ConfirmModal 
+        isOpen={showVnpayModal}
+        title="Chuyển sang VNPAY"
+        message="Bạn sẽ được chuyển hướng sang cổng thanh toán VNPAY để hoàn tất giao dịch. Vui lòng không đóng trình duyệt cho đến khi nhận được kết quả."
+        confirmText="Tiếp tục"
+        cancelText="Quay lại"
+        onConfirm={handleConfirmVnpay}
+        onCancel={() => setShowVnpayModal(false)}
       />
 
       <ConfirmModal 

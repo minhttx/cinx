@@ -133,11 +133,27 @@ const CheckinScanner = () => {
         throw new Error(`Vé chưa được thanh toán (Trạng thái: ${booking.status}).`);
       }
 
+      const now = new Date();
       const showtimeStart = new Date(`${booking.showtimes.show_date}T${booking.showtimes.show_time}`);
-      const movieDuration = booking.showtimes.movies.duration; // in minutes
+      const movieDuration = booking.showtimes.movies.duration || 120; // Default 120m if null
       const showtimeEnd = new Date(showtimeStart.getTime() + movieDuration * 60000);
       
-      if (new Date() > showtimeEnd) {
+      // Check if it's too early (e.g., more than 30 minutes before showtime)
+      const CHECKIN_WINDOW_MS = 30 * 60 * 1000; 
+      const allowCheckinFrom = new Date(showtimeStart.getTime() - CHECKIN_WINDOW_MS);
+
+      if (now < allowCheckinFrom) {
+        setResult({ 
+          status: 'warning', 
+          message: 'Chưa đến giờ quét', 
+          detail: `Chưa đến giờ quét QR cho suất chiếu này.
+Suất chiếu bắt đầu lúc: ${booking.showtimes.show_time} (${booking.showtimes.show_date}).
+Bạn chỉ có thể quét trước giờ chiếu 30 phút.` 
+        });
+        return;
+      }
+      
+      if (now > showtimeEnd) {
         throw new Error('Suất chiếu đã kết thúc.');
       }
       
@@ -202,14 +218,23 @@ ${booking.booking_seats.length} ghế: ${booking.booking_seats.map(s => s.seat_n
         className={`checkin-result-overlay ${result.status ? 'visible' : ''}`}
         onClick={() => setResult({ status: null, message: '', detail: '' })}
       >
-        <div className={`result-card ${result.status || ''}`}>
+        <div className={`result-card ${result.status || ''}`} onClick={(e) => e.stopPropagation()}>
           <span className="result-icon material-symbols-outlined">
             {result.status === 'success' && 'check_circle'}
             {result.status === 'error' && 'cancel'}
             {result.status === 'warning' && 'warning'}
           </span>
           <h2 className="result-message">{result.message}</h2>
-          <p className="result-detail">{result.detail}</p>
+          <div className="result-detail" style={{ whiteSpace: 'pre-line' }}>{result.detail}</div>
+          
+          <button 
+            className="m3-btn m3-btn-filled back-scan-btn" 
+            onClick={() => setResult({ status: null, message: '', detail: '' })}
+            style={{ marginTop: '20px', width: '100%' }}
+          >
+            <span className="material-symbols-outlined">arrow_back</span>
+            Quay lại
+          </button>
         </div>
       </div>
 

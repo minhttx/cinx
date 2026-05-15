@@ -1,6 +1,6 @@
 services:
   app:
-    build: 
+    build:
       context: .
       dockerfile: dockerfile
     container_name: cinx-web
@@ -35,7 +35,7 @@ services:
     image: docker.io/library/nginx:alpine
     container_name: cinx-proxy
     ports:
-      - "8080:80" # Using 8080 for rootless Podman compatibility
+      - "5678:80" # Using 8080 for rootless Podman compatibility
     volumes:
       - ./nginx.conf:/etc/nginx/nginx.conf:ro
     networks:

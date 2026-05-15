@@ -25,8 +25,8 @@ export const ContentProvider = ({ children }) => {
       setLoading(true);
       
       const [newsResult, promotionsResult] = await Promise.all([
-        contentAPI.getNews(3), // Get latest 3 news items
-        contentAPI.getPromotions(true) // Get active promotions only
+        contentAPI.getNews(), 
+        contentAPI.getPromotions()
       ]);
       
       if (!newsResult.error) {
@@ -36,6 +36,9 @@ export const ContentProvider = ({ children }) => {
       if (!promotionsResult.error) {
         setPromotions(promotionsResult.data || []);
       }
+      
+      // Dispatch custom event so other components know data was refreshed
+      window.dispatchEvent(new CustomEvent('contentRefreshed'));
       
     } catch (err) {
       console.error('Error loading content:', err);

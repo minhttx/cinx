@@ -58,7 +58,35 @@ export const roomAPI = {
 };
 
 export const showtimeAPI = {
-  async getMovieShowtimes(mid) { return await supabase.from(TABLES.SHOWTIMES).select('*').eq('movie_id', mid).gte('show_date', new Date().toISOString().split('T')[0]).order('show_date', { ascending: true }); },
+  async getMovieShowtimes(mid) {
+    const now = new Date();
+    const today = now.toISOString().split('T')[0];
+    
+    const { data, error } = await supabase
+      .from(TABLES.SHOWTIMES)
+      .select('*')
+      .eq('movie_id', mid)
+      .gte('show_date', today)
+      .order('show_date', { ascending: true })
+      .order('show_time', { ascending: true });
+
+    if (error) return { data: null, error };
+
+    // Filter out past showtimes for today
+    const filteredData = (data || []).filter(st => {
+      if (st.show_date > today) return true;
+      if (st.show_date === today) {
+        const [hours, minutes] = st.show_time.split(':');
+        const stDate = new Date();
+        stDate.setHours(parseInt(hours), parseInt(minutes), 0, 0);
+        // Allow booking until 10 minutes after show start, or adjust as needed
+        return stDate > now;
+      }
+      return false;
+    });
+
+    return { data: filteredData, error: null };
+  },
   async getShowtimeSeatSummary(sid) {
     const { data: s } = await supabase.from(TABLES.SEATS).select('id, status').eq('showtime_id', sid);
     const total = s?.length || 0;
@@ -67,7 +95,30 @@ export const showtimeAPI = {
     return { total, available, vipAvailable };
   },
   async getMovieShowtimesInBulk(mids) {
-    return await supabase.from(TABLES.SHOWTIMES).select('*').in('movie_id', mids).gte('show_date', new Date().toISOString().split('T')[0]).order('show_time', { ascending: true });
+    const now = new Date();
+    const today = now.toISOString().split('T')[0];
+
+    const { data, error } = await supabase
+      .from(TABLES.SHOWTIMES)
+      .select('*')
+      .in('movie_id', mids)
+      .gte('show_date', today)
+      .order('show_time', { ascending: true });
+
+    if (error) return { data: null, error };
+
+    const filteredData = (data || []).filter(st => {
+      if (st.show_date > today) return true;
+      if (st.show_date === today) {
+        const [hours, minutes] = st.show_time.split(':');
+        const stDate = new Date();
+        stDate.setHours(parseInt(hours), parseInt(minutes), 0, 0);
+        return stDate > now;
+      }
+      return false;
+    });
+
+    return { data: filteredData, error: null };
   },
   async getBulkShowtimeAvailability(sids) {
     // Use RPC to bypass the 1000-row limit and get accurate counts directly from DB
@@ -87,26 +138,40 @@ export const showtimeAPI = {
     return counts;
   },
   async getDetailedSeatStats(sids) {
-    // Sử dụng RPC để database tự tính toán counts, tránh lỗi 1000 rows limit và tăng tốc độ
-    const { data, error } = await supabase.rpc('get_detailed_seat_stats', { 
-      p_showtime_ids: sids 
-    });
-    
-    if (error) {
-      console.error('Detailed stats RPC error:', error);
+    if (!sids || sids.length === 0) return {};
+
+    try {
+      // Thay vì dùng RPC, ta truy vấn trực tiếp bảng seats để đếm chính xác
+      // Lấy tất cả ghế có trạng thái 'available' của các suất chiếu này
+      const { data, error } = await supabase
+        .from(TABLES.SEATS)
+        .select('showtime_id, seat_type, is_center')
+        .in('showtime_id', sids)
+        .eq('status', 'available');
+
+      if (error) throw error;
+
+      const stats = {};
+      // Khởi tạo object cho từng showtime_id
+      sids.forEach(id => {
+        stats[id] = { total: 0, vip: 0, couple: 0, centerVip: 0 };
+      });
+
+      // Duyệt qua dữ liệu thực tế và đếm
+      (data || []).forEach(seat => {
+        if (stats[seat.showtime_id]) {
+          stats[seat.showtime_id].total++;
+          if (seat.seat_type === 'vip') stats[seat.showtime_id].vip++;
+          if (seat.seat_type === 'couple') stats[seat.showtime_id].couple++;
+          if (seat.seat_type === 'vip' && seat.is_center) stats[seat.showtime_id].centerVip++;
+        }
+      });
+
+      return stats;
+    } catch (error) {
+      console.error('Detailed stats fetching error:', error);
       return {};
     }
-
-    const stats = {};
-    (data || []).forEach(row => {
-      stats[row.showtime_id] = { 
-        total: row.available_total, 
-        vip: row.available_vip, 
-        couple: row.available_couple, 
-        centerVip: row.available_center_vip 
-      };
-    });
-    return stats;
   }
 };
 
@@ -136,7 +201,8 @@ export const bookingAPI = {
       const recs = seats.map(s => ({ booking_id: b.id, seat_id: s.seat_id || s.id || null, seat_number: s.soGhe || s.seat_number, seat_price: s.gia || 0 }));
       await supabase.from(TABLES.BOOKING_SEATS).insert(recs);
       if (status === 'confirmed') {
-        const ids = seats.map(s => s.seat_id || s.id).filter(id => id && typeof id !== 'string');
+        // Fix: UUIDs are strings in JS, so we should allow strings but filter out nulls/undefined
+        const ids = seats.map(s => s.seat_id || s.id).filter(id => id != null);
         if (ids.length > 0) await supabase.from(TABLES.SEATS).update({ status: 'booked' }).in('id', ids);
         
         // AUTO-RECORD TO REVENUE HISTORY
@@ -149,7 +215,7 @@ export const bookingAPI = {
     const { data, error } = await supabase.from(TABLES.BOOKINGS).update({ status }).eq('id', id).select().single();
     if (!error && status === 'confirmed') {
       if (seats.length > 0) {
-        const ids = seats.map(s => s.seat_id || s.id).filter(id => id && typeof id !== 'string');
+        const ids = seats.map(s => s.seat_id || s.id).filter(id => id != null);
         if (ids.length > 0) await supabase.from(TABLES.SEATS).update({ status: 'booked' }).in('id', ids);
       }
       
@@ -432,17 +498,73 @@ export const overviewAPI = {
     const { error } = await supabase.from(TABLES.MOVIES).select('id').limit(1);
     return { data: { connected: !error, lastCheck: new Date().toISOString() } };
   },
-  async getBookingHourStats() {
-    const { data: b } = await supabase.from(TABLES.BOOKINGS).select('showtime_info');
-    const hourCounts = {};
-    (b || []).forEach(x => {
-      const info = typeof x.showtime_info === 'string' ? JSON.parse(x.showtime_info) : x.showtime_info;
-      if (info?.show_time) {
-        const hour = info.show_time.split(':')[0] + ':00';
-        hourCounts[hour] = (hourCounts[hour] || 0) + 1;
-      }
+  async getBookingAnalyticsData() {
+    // 1. Khởi tạo ma trận dữ liệu: Thứ (2-CN) x Khung giờ (9, 13, 16, 19, 21:30)
+    const daysOrder = ['Thứ 2', 'Thứ 3', 'Thứ 4', 'Thứ 5', 'Thứ 6', 'Thứ 7', 'Chủ Nhật'];
+    const hoursOrder = ['09:00', '13:00', '16:00', '19:00', '21:30'];
+    
+    const heatmap = {};
+    daysOrder.forEach(d => {
+      heatmap[d] = {};
+      hoursOrder.forEach(h => { heatmap[d][h] = 0; });
     });
-    return hourCounts;
+
+    try {
+      // 2. Lấy dữ liệu 30 ngày gần nhất để heatmap có ý nghĩa thống kê
+      const thirtyDaysAgo = new Date();
+      thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
+
+      const { data: b, error } = await supabase
+        .from(TABLES.BOOKINGS)
+        .select('showtime_info, created_at')
+        .gte('created_at', thirtyDaysAgo.toISOString())
+        .eq('status', 'confirmed');
+
+      if (error) throw error;
+
+      (b || []).forEach(x => {
+        try {
+          const info = typeof x.showtime_info === 'string' ? JSON.parse(x.showtime_info) : x.showtime_info;
+          const timeValue = info?.time || info?.show_time;
+          const dateValue = info?.date || x.created_at;
+
+          if (timeValue && dateValue) {
+            // Xác định Thứ
+            const dateObj = new Date(dateValue);
+            let dayIdx = dateObj.getDay(); // 0 = Sunday, 1 = Monday...
+            const dayKey = dayIdx === 0 ? 'Chủ Nhật' : `Thứ ${dayIdx + 1}`;
+
+            // Xác định Khung giờ chuẩn gần nhất
+            const [h, m] = timeValue.split(':');
+            const hourInt = parseInt(h);
+            const minInt = parseInt(m);
+            const totalMinutes = hourInt * 60 + minInt;
+            
+            const standards = {
+              '09:00': 9 * 60,
+              '13:00': 13 * 60,
+              '16:00': 16 * 60,
+              '19:00': 19 * 60,
+              '21:30': 21 * 60 + 30
+            };
+
+            for (const [key, stdMin] of Object.entries(standards)) {
+              if (Math.abs(totalMinutes - stdMin) <= 45) {
+                if (heatmap[dayKey] && heatmap[dayKey][key] !== undefined) {
+                  heatmap[dayKey][key]++;
+                }
+                break;
+              }
+            }
+          }
+        } catch (e) {}
+      });
+
+      return { heatmap, days: daysOrder, hours: hoursOrder };
+    } catch (err) {
+      console.error('Heatmap data error:', err);
+      return { heatmap, days: daysOrder, hours: hoursOrder };
+    }
   },
   async getRevenueStats(days = 7) {
     const startDate = new Date();
